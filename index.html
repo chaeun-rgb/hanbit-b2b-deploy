@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>한빛+ 기업교육 · B2B 랜딩 페이지 미리보기</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  /* ===== 한빛 Design System CSS 변수 ===== */
+  :root {
+    /* Primary (브랜드 — Emerald) */
+    --color-primary-normal: #03aea0;
+    --color-primary-strong: #009e91;
+    --color-primary-heavy: #028b80;
+
+    /* Label (텍스트) */
+    --color-label-strong: #000000;
+    --color-label-normal: #030712;
+    --color-label-neutral: rgba(30, 41, 57, 0.88);
+    --color-label-alternative: rgba(62, 74, 92, 0.61);
+    --color-label-assistive: rgba(62, 74, 92, 0.28);
+    --color-label-disable: rgba(62, 74, 92, 0.16);
+
+    /* Background */
+    --color-bg-normal: #ffffff;
+    --color-bg-alternative: #f3f4f6;
+
+    /* Line / Fill */
+    --color-line-normal: rgba(92, 102, 118, 0.22);
+    --color-line-neutral: rgba(92, 102, 118, 0.16);
+    --color-line-alternative: rgba(92, 102, 118, 0.08);
+    --color-fill-normal: rgba(92, 102, 118, 0.08);
+    --color-fill-strong: rgba(92, 102, 118, 0.16);
+    --color-fill-alternative: rgba(92, 102, 118, 0.05);
+
+    /* Status */
+    --color-status-positive: #00c950;
+    --color-status-cautionary: #ff6900;
+    --color-status-negative: #fb2c36;
+
+    /* Inverse (다크 모드 표면) */
+    --color-inverse-bg: #030712;
+    --color-inverse-bg-elevated: #101828;
+    --color-inverse-bg-soft: #1e2939;
+    --color-inverse-label: #f3f4f6;
+    --color-inverse-primary: #03aea0;
+
+    /* Material */
+    --color-dimmer: rgba(3, 7, 18, 0.52);
+
+    /* 프로젝트 로컬 — Primary 투명 변형 (대시보드 칩/하이라이트용) */
+    --color-primary-tint: rgba(3, 174, 160, 0.12);
+    --color-primary-soft: rgba(3, 174, 160, 0.2);
+    --color-primary-on-dark: #4fc9bf; /* 다크 배경 위 가독성 보조용 (Emerald/35) */
+
+    /* 브레이크포인트 (참조용) — sm 768 / md 992 / lg 1200 / xl 1600 */
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Pretendard', 'Noto Sans KR', sans-serif; background: var(--color-bg-normal); }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+const sections = ["서비스", "과정안내", "고객사례", "문의하기"];
+const stats = [
+  { number: "30", suffix: "년+", label: "IT 교육 경력" },
+  { number: "4,000", suffix: "종+", label: "검증된 콘텐츠" },
+  { number: "200", suffix: "개+", label: "도입 기업" },
+];
+
+/* === 확장된 파트너 데이터 === */
+const partnersByIndustry = {
+  "IT/플랫폼": ["카카오", "네이버", "토스", "쿠팡", "배달의민족"],
+  "제조/전자": ["삼성전자", "LG전자", "현대자동차", "SK하이닉스", "포스코"],
+  "금융/서비스": ["KB국민은행", "신한금융", "삼성생명", "NH투자증권"],
+  "통신/미디어": ["SK", "KT", "LG유플러스", "CJ ENM"],
+};
+
+const bigNumbers = [
+  { prefix: "+", number: "94", suffix: "%", label: "평균 교육 이수율", sub: "업계 평균 대비 22%p 높음" },
+  { prefix: "", number: "4.7", suffix: "/5.0", label: "수강 만족도", sub: "2024~2025 기업교육 기준" },
+  { prefix: "+", number: "120", suffix: "명", label: "저자 직강 강사진", sub: "베스트셀러 저자 네트워크" },
+  { prefix: "+", number: "85", suffix: "%", label: "재계약율", sub: "첫 교육 이후 재도입 비율" },
+];
+
+const featuredCourses = [
+  { title: "비개발자를 위한 AI 리터러시", level: "입문", duration: "4주", format: "온라인+오프라인", hot: true, desc: "ChatGPT, Copilot 등 AI 도구를 실무에 바로 적용하는 핵심 과정", tags: ["AI", "비개발자", "실습형"] },
+  { title: "바이브 코딩으로 업무 자동화", level: "중급", duration: "6주", format: "온라인", hot: true, desc: "코딩 경험 없이도 AI와 대화하며 업무 자동화 앱을 직접 만드는 과정", tags: ["자동화", "노코드", "AI"] },
+  { title: "LLM/RAG 아키텍처 실무", level: "고급", duration: "8주", format: "블렌디드", hot: false, desc: "사내 데이터 기반 RAG 시스템을 설계하고 구축하는 엔지니어 심화 과정", tags: ["LLM", "RAG", "엔지니어"] },
+  { title: "경영자를 위한 AX 전략", level: "경영", duration: "2주", format: "오프라인 워크숍", hot: false, desc: "AI 시대 비즈니스 전환 전략을 수립하는 경영진 전용 집중 프로그램", tags: ["경영진", "전략", "워크숍"] },
+];
+
+const authorInstructors = [
+  { name: "박해선", title: "머신러닝/딥러닝 시리즈 저자", books: "「혼자 공부하는 머신러닝+딥러닝」 외 8권", specialty: "AI/ML 입문 · 실습", img: "🧑‍💻" },
+  { name: "이기창", title: "자연어 처리 전문가", books: "「Do it! BERT와 GPT로 배우는 NLP」 외 3권", specialty: "NLP · LLM", img: "👨‍🔬" },
+  { name: "조현영", title: "Node.js 시리즈 저자", books: "「Node.js 교과서」 외 5권", specialty: "백엔드 · JavaScript", img: "👨‍💻" },
+  { name: "윤인성", title: "프로그래밍 입문 시리즈 저자", books: "「혼자 공부하는 파이썬」 외 10권+", specialty: "프로그래밍 입문 · Python", img: "🧑‍🏫" },
+];
+
+const comparisons = [
+  { category: "학습 자료", traditional: "외부 영상 강의만 제공", hanbit: "도서 + 영상 + 실습 환경 통합" },
+  { category: "강사진", traditional: "외부 강사 섭외 (검증 어려움)", hanbit: "베스트셀러 저자 직강 (120명+ 네트워크)" },
+  { category: "커리큘럼", traditional: "범용 과정 그대로 적용", hanbit: "기업별 직무 분석 기반 맞춤 설계" },
+  { category: "사후관리", traditional: "교육 종료 후 관계 종료", hanbit: "성과 분석 리포트 + 후속 과정 추천" },
+  { category: "글로벌 콘텐츠", traditional: "번역 없는 해외 자료 링크", hanbit: "O'Reilly · Packt 한국어 독점 제공" },
+  { category: "학습 깊이", traditional: "짧은 영상 위주 (이론만)", hanbit: "도서로 깊은 이해 → 영상으로 실습 연결" },
+];
+const painPoints = [
+  {
+    problem: "AI 도구를 도입했지만,\n임직원이 제대로 활용하지 못합니다",
+    solution: "AI 리터러시 코스 + 업무 자동화 실습",
+    icon: "🤖",
+    tag: "AI 활용",
+  },
+  {
+    problem: "개발팀과 비개발 직군 사이\n소통의 벽이 높습니다",
+    solution: "IT 인프라 기초 + 최소한의 프로그래밍 과정",
+    icon: "🔗",
+    tag: "조직 소통",
+  },
+  {
+    problem: "교육은 했는데,\n실무 적용률이 낮습니다",
+    solution: "저자 직강 + 도서 연계 통합 학습 패키지",
+    icon: "📊",
+    tag: "실무 적용",
+  },
+];
+const differentiators = [
+  {
+    num: "01",
+    tag: "업계 유일",
+    title: "도서와 영상을 결합한\n통합 학습 경험",
+    desc: "4,000종의 IT 도서와 전문 강의를 하나의 학습 경로로 설계합니다. 이론은 책으로 깊이 있게, 실습은 영상으로 빠르게.",
+    bullets: ["베스트셀러 IT 도서 교재 제공", "영상 강의 + 실습 환경 일체형", "자기주도 학습 → 워크숍 연계"],
+    visual: "book",
+  },
+  {
+    num: "02",
+    tag: "O'Reilly · Packt 파트너",
+    title: "글로벌 표준의\nIT 기술 콘텐츠",
+    desc: "미국 O'Reilly, 영국 Packt 등 세계 최고의 IT 출판사 콘텐츠를 한국어로 독점 제공합니다.",
+    bullets: ["글로벌 파트너 12개사 제휴", "최신 기술 트렌드 실시간 반영", "영문 원서 + 한국어판 동시 제공"],
+    visual: "global",
+  },
+  {
+    num: "03",
+    tag: "전담 매니저 배정",
+    title: "기획부터 성과 리포트까지\n엔드투엔드 책임",
+    desc: "직무 분석부터 커리큘럼 설계, 학습 성과 리포트까지. 전담 매니저가 교육의 처음부터 끝까지 함께합니다.",
+    bullets: ["직무별 역량 진단 → 맞춤 설계", "교육 중 실시간 LMS 모니터링", "교육 후 성과 분석 리포트 제공"],
+    visual: "process",
+  },
+];
+/* === 로드맵 데이터 — courses-data.json에서 런타임 로드 === */
+let roadmapCategories = [];
+const _OLD_DATA_START = [
+  { key: "ai-usage", label: "AI 활용", count: 22,
+    desc: "실무자 · 비개발자 관점 — 프롬프트 · 노코드 자동화 · 바이브 코딩",
+    subcats: ["프롬프트 엔지니어링", "노코드 업무 자동화", "바이브 코딩", "콘텐츠 제작"],
+    courses: [
+      { title: "GPT와 오픈AI API로 시작하는 프롬프트 엔지니어링", sub: "프롬프트 엔지니어링", level: "초중급", brand: "Packt", dur: "2h 17m" },
+      { title: "실무자를 위한 프롬프트 디자인", sub: "프롬프트 엔지니어링", level: "입문", brand: "한빛", dur: "3h" },
+      { title: "Claude 고급 프롬프팅 기법", sub: "프롬프트 엔지니어링", level: "중급", brand: "한빛", dur: "4h" },
+      { title: "n8n으로 시작하는 노코드 AI 자동화", sub: "노코드 업무 자동화", level: "중급", brand: "한빛", dur: "7h 11m" },
+      { title: "Make(Integromat) 업무 자동화", sub: "노코드 업무 자동화", level: "입문", brand: "한빛", dur: "5h" },
+      { title: "Zapier + ChatGPT 워크플로우", sub: "노코드 업무 자동화", level: "입문", brand: "한빛", dur: "3h 30m" },
+      { title: "핸즈온 바이브 코딩: 데브옵스", sub: "바이브 코딩", level: "초중급", brand: "한빛", dur: "5h 28m" },
+      { title: "핸즈온 바이브 코딩: 백엔드", sub: "바이브 코딩", level: "초중급", brand: "한빛", dur: "6h 32m" },
+      { title: "바이브 코딩으로 업무 앱 만들기", sub: "바이브 코딩", level: "입문", brand: "한빛", dur: "4h" },
+      { title: "개발 생산성 향상을 위한 체크리스트 12가지", sub: "바이브 코딩", level: "중급", brand: "한빛", dur: "3h 2m" },
+    ]},
+  { key: "ai-agent", label: "AI 에이전트", count: 30,
+    desc: "에이전트 설계 · 멀티 에이전트 · MCP · 자율형 AI 시스템",
+    subcats: ["에이전트 기초", "멀티 에이전트", "MCP · 도구 연결"],
+    courses: [
+      { title: "AI 에이전트 설계 입문", sub: "에이전트 기초", level: "입문", brand: "한빛", dur: "4h" },
+      { title: "LangChain 기반 에이전트 개발", sub: "에이전트 기초", level: "중급", brand: "한빛", dur: "8h" },
+      { title: "AI Agent Fundamentals", sub: "에이전트 기초", level: "중급", brand: "Packt", dur: "6h" },
+      { title: "멀티 에이전트 시스템 구축", sub: "멀티 에이전트", level: "고급", brand: "한빛", dur: "10h" },
+      { title: "CrewAI 실전 프로젝트", sub: "멀티 에이전트", level: "중급", brand: "한빛", dur: "6h" },
+      { title: "MCP 서버 구축과 도구 연결", sub: "MCP · 도구 연결", level: "중급", brand: "한빛", dur: "5h" },
+      { title: "Function Calling 완벽 가이드", sub: "MCP · 도구 연결", level: "초중급", brand: "한빛", dur: "4h" },
+    ]},
+  { key: "dx-strategy", label: "DX 전략", count: 12,
+    desc: "경영진 · 리더 대상 — AI 전환 전략 · 데이터 기반 의사결정",
+    subcats: ["AX 전략", "디지털 전환", "데이터 의사결정"],
+    courses: [
+      { title: "경영자를 위한 AX 전략", sub: "AX 전략", level: "중급", brand: "한빛", dur: "2주 워크숍" },
+      { title: "AI 시대 비즈니스 모델 혁신", sub: "AX 전략", level: "고급", brand: "한빛", dur: "1주" },
+      { title: "디지털 전환 로드맵 수립", sub: "디지털 전환", level: "중급", brand: "한빛", dur: "8h" },
+      { title: "데이터 기반 의사결정 프레임워크", sub: "데이터 의사결정", level: "입문", brand: "한빛", dur: "6h" },
+    ]},
+  { key: "data-science", label: "데이터사이언스", count: 28,
+    desc: "데이터 분석 · 머신러닝 · 딥러닝 · MLOps",
+    subcats: ["데이터 분석", "머신러닝", "딥러닝 · LLM"],
+    courses: [
+      { title: "데이터 리터러시 입문", sub: "데이터 분석", level: "입문", brand: "한빛", dur: "4h" },
+      { title: "Python 데이터 분석", sub: "데이터 분석", level: "중급", brand: "한빛", dur: "8h" },
+      { title: "SQL 데이터 분석 기초", sub: "데이터 분석", level: "입문", brand: "한빛", dur: "5h" },
+      { title: "혼자 공부하는 머신러닝+딥러닝", sub: "머신러닝", level: "입문", brand: "한빛", dur: "12h" },
+      { title: "사이킷런 실무 머신러닝", sub: "머신러닝", level: "중급", brand: "한빛", dur: "10h" },
+      { title: "LLM/RAG 아키텍처 실무", sub: "딥러닝 · LLM", level: "고급", brand: "한빛", dur: "8주" },
+      { title: "Fine-tuning LLMs", sub: "딥러닝 · LLM", level: "고급", brand: "Packt", dur: "6h" },
+    ]},
+  { key: "sw-dev", label: "SW 개발", count: 31,
+    desc: "프로그래밍 언어 · 프레임워크 · 백엔드 · 아키텍처",
+    subcats: ["Python", "JavaScript · Node.js", "Java · Spring"],
+    courses: [
+      { title: "혼자 공부하는 파이썬", sub: "Python", level: "입문", brand: "한빛", dur: "8h" },
+      { title: "파이썬 중급 프로그래밍", sub: "Python", level: "중급", brand: "한빛", dur: "10h" },
+      { title: "Node.js 교과서", sub: "JavaScript · Node.js", level: "중급", brand: "한빛", dur: "12h" },
+      { title: "React 실전 프로젝트", sub: "JavaScript · Node.js", level: "중급", brand: "한빛", dur: "8h" },
+      { title: "Java · Spring Boot 실무", sub: "Java · Spring", level: "중급", brand: "한빛", dur: "10h" },
+      { title: "클린 코드 & 리팩터링", sub: "Java · Spring", level: "고급", brand: "한빛", dur: "6h" },
+    ]},
+  { key: "cloud", label: "클라우드", count: 4,
+    desc: "AWS · Docker · Kubernetes · 클라우드 네이티브",
+    subcats: ["AWS", "컨테이너 · K8s"],
+    courses: [
+      { title: "AWS 기초 · 실습", sub: "AWS", level: "입문", brand: "한빛", dur: "6h" },
+      { title: "AWS 아키텍처 설계", sub: "AWS", level: "중급", brand: "Packt", dur: "8h" },
+      { title: "Docker · Kubernetes 실무", sub: "컨테이너 · K8s", level: "중급", brand: "한빛", dur: "10h" },
+    ]},
+  { key: "security", label: "보안", count: 1,
+    desc: "정보보안 · 클라우드 보안 · AI 보안 윤리",
+    subcats: ["보안 기초", "클라우드 보안"],
+    courses: [
+      { title: "정보보안 기초", sub: "보안 기초", level: "입문", brand: "한빛", dur: "5h" },
+      { title: "클라우드 보안 실무", sub: "클라우드 보안", level: "중급", brand: "한빛", dur: "6h" },
+    ]},
+  { key: "db", label: "DB", count: 7,
+    desc: "SQL · NoSQL · 데이터베이스 설계 · 운영",
+    subcats: ["SQL · RDB", "NoSQL"],
+    courses: [
+      { title: "SQL 첫걸음", sub: "SQL · RDB", level: "입문", brand: "한빛", dur: "4h" },
+      { title: "데이터베이스 설계와 최적화", sub: "SQL · RDB", level: "중급", brand: "한빛", dur: "8h" },
+      { title: "MongoDB 실무", sub: "NoSQL", level: "중급", brand: "Packt", dur: "5h" },
+    ]},
+  { key: "it-infra", label: "IT 인프라", count: 9,
+    desc: "네트워크 · 리눅스 · IT 교양 · 비개발자 IT 기초",
+    subcats: ["IT 기초", "네트워크 · 리눅스"],
+    courses: [
+      { title: "비개발자를 위한 IT 교양", sub: "IT 기초", level: "입문", brand: "한빛", dur: "4h" },
+      { title: "AI 리터러시", sub: "IT 기초", level: "입문", brand: "한빛", dur: "3h" },
+      { title: "리눅스 기초와 실습", sub: "네트워크 · 리눅스", level: "입문", brand: "한빛", dur: "6h" },
+      { title: "네트워크 인프라 이해하기", sub: "네트워크 · 리눅스", level: "중급", brand: "한빛", dur: "5h" },
+    ]},
+];
+/* 위 _OLD_DATA_START는 미사용 — JSON에서 로드 */
+const LEVELS = ["심화", "중급", "초중급", "입문"];
+const levelColors = { "입문": "#03aea0", "초중급": "#0891b2", "중급": "#2563eb", "심화": "#6366f1" };
+const brandColors = { "한빛Original": "#e89a3c", "Packt": "#9ca3af", "Upstage": "#a78bfa", "한빛랩스": "#f472b6" };
+const courseData = {};
+const caseStudies = [
+  {
+    company: "A사 (IT/플랫폼, 500명+)",
+    challenge: "전사 AI 전환을 위한 비개발 직군의 AI 리터러시 교육 필요",
+    course: "AI 리터러시 코스 + 업무 자동화 실습 (8주)",
+    results: ["교육 이수율 94%", "만족도 4.7/5.0", "업무 자동화 적용 32건"],
+    quote: "도서와 영상을 결합한 학습 방식 덕분에 실무 적용까지 연결되었습니다.",
+    quoter: "HR팀 교육 담당자",
+  },
+  {
+    company: "B사 (제조업, 1,000명+)",
+    challenge: "신입 개발자 온보딩 교육 체계 수립",
+    course: "IT 인프라 기초 + 프로그래밍 심화 (12주)",
+    results: ["온보딩 기간 40% 단축", "기술 평가 점수 28% 향상"],
+    quote: "저자 직강으로 현장 질문에 즉각 답변받을 수 있어 효과적이었습니다.",
+    quoter: "CTO실 기술교육 매니저",
+  },
+  {
+    company: "C사 (금융, 300명+)",
+    challenge: "경영진 대상 AX 전략 수립 역량 강화",
+    course: "AX 전략 코스 + 경영자 워크숍 (4주)",
+    results: ["참여 임원 만족도 4.8/5.0", "AI 전환 로드맵 3건 도출"],
+    quote: "한빛미디어 도서를 사전에 읽고 워크숍에 참여하니 깊이가 달랐습니다.",
+    quoter: "경영기획실장",
+  },
+];
+const processSteps = [
+  { step: "01", title: "상담 및 요구조사", desc: "기업 니즈 파악\n직무별 역량 진단", icon: "💬" },
+  { step: "02", title: "제안서 및 설계", desc: "커리큘럼 구성 설계\n비용 및 일정 협의", icon: "📋" },
+  { step: "03", title: "실행 및 운영", desc: "교육 진행 · 도서 제공\nLMS 학습관리", icon: "🚀" },
+  { step: "04", title: "평가 및 사후관리", desc: "성과 분석 리포트\n개선 과정 설계", icon: "📈" },
+];
+const faqs = [
+  { q: "최소 수강 인원은 몇 명인가요?", a: "10명 이상부터 기업교육 프로그램을 운영하실 수 있습니다. 소규모 팀의 경우 별도 상담을 통해 맞춤 방안을 제안드립니다." },
+  { q: "온라인/오프라인/블렌디드 모두 가능한가요?", a: "네, 모든 형태로 운영 가능합니다. 기업 환경에 맞는 최적의 학습 방식을 함께 설계해드립니다." },
+  { q: "교육 기간은 보통 얼마나 걸리나요?", a: "과정에 따라 1일 특강부터 12주 심화 프로그램까지 다양합니다. 기업 일정에 맞춰 유연하게 조정 가능합니다." },
+  { q: "수료증/인증서가 발급되나요?", a: "한빛미디어 명의의 수료 인증서가 발급됩니다. 과정에 따라 글로벌 파트너(O'Reilly 등) 공동 인증도 가능합니다." },
+  { q: "비용은 어떻게 산정되나요?", a: "교육 인원, 기간, 과정 난이도에 따라 맞춤 견적을 제공합니다. 상담 시 예산 범위를 알려주시면 최적의 프로그램을 제안드립니다." },
+];
+const partners = ["삼성전자", "LG전자", "카카오", "네이버", "현대자동차", "SK", "KT", "우아한형제들", "토스", "쿠팡"];
+
+function AnimatedNumber({ target, suffix }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.5 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!visible) return;
+    const num = parseInt(target.replace(/,/g, ""));
+    const duration = 1500;
+    const step = Math.ceil(num / (duration / 16));
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= num) { current = num; clearInterval(timer); }
+      setCount(current);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [visible, target]);
+  const formatted = count.toLocaleString();
+  return <span ref={ref}>{formatted}{suffix}</span>;
+}
+
+/* === 행태 분석 트래커 === */
+const PromoAnalytics = {
+  events: [],
+  track(eventType, slotId, extra) {
+    const event = {
+      type: eventType,
+      slotId,
+      timestamp: new Date().toISOString(),
+      page: window.location.pathname,
+      ...extra,
+    };
+    this.events.push(event);
+    console.log('[Promo Analytics]', eventType, slotId, extra || '');
+    // dataLayer 푸시 (GTM/GA 연동용)
+    if (window.dataLayer) {
+      window.dataLayer.push({ event: 'promo_' + eventType, promo_slot: slotId, ...extra });
+    }
+  },
+  trackView(slotId) { this.track('view', slotId); },
+  trackClick(slotId, actionType) { this.track('click', slotId, { actionType }); },
+  trackSubmit(slotId, resourceName) { this.track('submit', slotId, { resourceName }); },
+};
+window.dataLayer = window.dataLayer || [];
+
+/* === 뷰 트래킹 훅 === */
+function useViewTracking(slotId, active) {
+  const ref = useRef(null);
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (!active || tracked.current || !ref.current) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !tracked.current) {
+        tracked.current = true;
+        PromoAnalytics.trackView(slotId);
+      }
+    }, { threshold: 0.3 });
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [slotId, active]);
+  return ref;
+}
+
+/* === 리드 캡처 모달 === */
+function LeadCaptureModal({ config, onClose }) {
+  const [lead, setLead] = useState({ company: '', name: '', email: '' });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const canSubmit = lead.company && lead.name && lead.email;
+
+  const handleSubmit = () => {
+    if (!canSubmit) return;
+    setSubmitting(true);
+    PromoAnalytics.trackSubmit(config.slotId, config.resourceName);
+    // API로 리드 데이터 전송
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        company: lead.company,
+        name: lead.name,
+        email: lead.email,
+        resource: config.resourceName,
+        slotId: config.slotId,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+      .then(r => r.json())
+      .then(() => { setSubmitting(false); setSubmitted(true); })
+      .catch(() => { setSubmitting(false); setSubmitted(true); }); // 에러 시에도 사용자에겐 완료 표시
+  };
+
+  if (!config) return null;
+
+  return (
+    <div className="lead-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="lead-modal">
+        <button className="lead-modal-close" onClick={onClose}>×</button>
+        {!submitted ? (
+          <>
+            <div className="lead-modal-header">
+              <div style={{ fontSize: 40, marginBottom: 12 }}>📥</div>
+              <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-inverse-label)', marginBottom: 8, lineHeight: 1.3 }}>
+                {config.resourceName}
+              </h3>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>
+                {config.resourceDesc}
+              </p>
+            </div>
+            <div className="lead-modal-body">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+                <div>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-label-neutral)', display: 'block', marginBottom: 6 }}>회사명 *</label>
+                  <input className="lead-modal-input" placeholder="회사명을 입력해주세요" value={lead.company} onChange={e => setLead({...lead, company: e.target.value})} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-label-neutral)', display: 'block', marginBottom: 6 }}>담당자명 *</label>
+                  <input className="lead-modal-input" placeholder="성함을 입력해주세요" value={lead.name} onChange={e => setLead({...lead, name: e.target.value})} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-label-neutral)', display: 'block', marginBottom: 6 }}>이메일 *</label>
+                  <input className="lead-modal-input" type="email" placeholder="email@company.com" value={lead.email} onChange={e => setLead({...lead, email: e.target.value})} />
+                </div>
+              </div>
+              <button className="lead-modal-submit" disabled={!canSubmit || submitting} onClick={handleSubmit}>
+                {submitting ? '처리 중...' : '무료 자료 받기'}
+              </button>
+              <p style={{ fontSize: 11, color: 'var(--color-label-assistive)', textAlign: 'center', marginTop: 12, lineHeight: 1.5 }}>
+                입력하신 정보는 자료 발송 및 교육 상담 목적으로만 활용됩니다
+              </p>
+            </div>
+          </>
+        ) : (
+          <div className="lead-success">
+            <div className="lead-success-icon">✅</div>
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-label-normal)', marginBottom: 12 }}>
+              신청이 완료되었습니다!
+            </h3>
+            <p style={{ fontSize: 15, color: 'var(--color-label-alternative)', lineHeight: 1.7, marginBottom: 8 }}>
+              <strong>{lead.email}</strong>로<br/>
+              <strong>{config.resourceName}</strong>을 보내드리겠습니다.
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--color-label-assistive)', marginBottom: 28 }}>
+              영업일 기준 1일 이내 발송됩니다
+            </p>
+            <button className="lead-modal-submit" onClick={onClose} style={{ maxWidth: 200, margin: '0 auto' }}>확인</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function HanbitB2BPage() {
+  const [activeTab, setActiveTab] = useState("비개발 직군");
+  const [roadmapCat, setRoadmapCat] = useState(0);
+  const [roadmapOriginalOnly, setRoadmapOriginalOnly] = useState(false);
+  const [roadmapData, setRoadmapData] = useState([]);
+
+  // 로드맵 데이터 로딩
+  useEffect(() => {
+    fetch('./courses-data.json')
+      .then(r => r.json())
+      .then(data => { setRoadmapData(data); roadmapCategories = data; })
+      .catch(err => console.warn('[Roadmap] Data load failed:', err));
+  }, []);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [formData, setFormData] = useState({ company: "", name: "", contact: "", interest: "AI/데이터" });
+  const [scrolled, setScrolled] = useState(false);
+  const [promoSlots, setPromoSlots] = useState([]);
+  const [modalConfig, setModalConfig] = useState(null);
+
+  // 프로모션 데이터 로딩
+  useEffect(() => {
+    fetch('./promo-config.json')
+      .then(r => r.json())
+      .then(data => setPromoSlots(data.slots || []))
+      .catch(err => console.warn('[Promo] Config load failed:', err));
+  }, []);
+
+  // 광고 클릭 핸들러
+  const handlePromoClick = (slot, action) => {
+    PromoAnalytics.trackClick(slot.id, action.type);
+    if (action.type === 'popup') {
+      setModalConfig({ slotId: slot.id, resourceName: action.resourceName, resourceDesc: action.resourceDesc });
+    } else if (action.type === 'link' && action.url) {
+      window.open(action.url, '_blank');
+    } else if (action.type === 'scroll') {
+      document.getElementById('문의하기')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // 슬롯 찾기 헬퍼
+  const getSlot = (id) => promoSlots.find(s => s.id === id && s.active);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+  return (
+    <div style={{ fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif", color: "var(--color-label-normal)", background: "var(--color-bg-normal)", overflowX: "hidden" }}>
+      <style>{`
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        ::selection { background: var(--color-primary-normal); color: var(--color-inverse-label); }
+
+        /* === NAV === */
+        .nav-fixed {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          transition: all 0.3s ease;
+        }
+        .nav-scrolled {
+          background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+          box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+        }
+
+        /* === HERO === */
+        .hero-section {
+          min-height: auto; display: flex; align-items: center;
+          background: linear-gradient(165deg, var(--color-inverse-bg) 0%, var(--color-inverse-bg-elevated) 40%, var(--color-inverse-bg-soft) 100%);
+          position: relative; overflow: hidden;
+        }
+        .hero-section::before {
+          content: ''; position: absolute; inset: 0;
+          background: radial-gradient(ellipse at 70% 30%, rgba(3,174,160,0.1) 0%, transparent 50%),
+                      radial-gradient(ellipse at 30% 80%, rgba(30,60,90,0.15) 0%, transparent 50%);
+        }
+        .hero-section::after {
+          content: ''; position: absolute; inset: 0;
+          background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .hero-inner {
+          display: flex; align-items: center; gap: 48px;
+          max-width: 1200px; margin: 0 auto; padding: 120px 20px 72px; width: 100%;
+          position: relative; z-index: 2;
+        }
+        .hero-text { flex: 1; min-width: 0; }
+        .hero-visual { flex: 0 0 440px; position: relative; display: none; }
+        @media (min-width: 992px) { .hero-visual { display: block; } }
+        @media (min-width: 992px) { .hero-inner { padding: 140px 20px 80px; } }
+
+        /* floating cards in hero visual */
+        .hero-float-card {
+          position: absolute; border-radius: 16px; padding: 20px 24px;
+          background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+          backdrop-filter: blur(12px); transition: transform 0.6s ease;
+        }
+        .hero-float-card:hover { transform: translateY(-4px) scale(1.02); }
+        .hero-float-card.card-1 { top: 0; left: 20px; width: 260px; animation: floatA 6s ease-in-out infinite; }
+        .hero-float-card.card-2 { top: 120px; right: 0; width: 240px; animation: floatB 7s ease-in-out infinite; }
+        .hero-float-card.card-3 { bottom: 40px; left: 40px; width: 280px; animation: floatA 8s ease-in-out infinite; animation-delay: 1s; }
+
+        @keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        .stat-card {
+          text-align: center; padding: 20px;
+          border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-card:last-child { border-right: none; }
+
+        /* === CARDS === */
+        .pain-card {
+          background: var(--color-bg-normal); border-radius: 16px; padding: 36px 32px;
+          border: 1px solid var(--color-line-normal); transition: all 0.4s ease;
+          position: relative; overflow: hidden;
+        }
+        .pain-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+          border-color: var(--color-primary-normal);
+        }
+        .pain-card::after {
+          content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+          height: 3px; background: linear-gradient(90deg, var(--color-primary-normal), var(--color-primary-strong));
+          transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .pain-card:hover::after { transform: scaleX(1); }
+
+        .diff-card {
+          padding: 48px 40px; border-radius: 20px;
+          background: var(--color-bg-normal); border: 1px solid var(--color-line-normal);
+          transition: all 0.35s ease;
+        }
+        .diff-card:hover {
+          background: var(--color-inverse-bg); color: var(--color-inverse-label); border-color: var(--color-inverse-bg);
+          transform: translateY(-4px); box-shadow: 0 24px 48px rgba(3,7,18,0.2);
+        }
+        .diff-card:hover .diff-subtitle { color: var(--color-primary-on-dark) !important; }
+        .diff-card:hover .diff-desc { color: rgba(255,255,255,0.7) !important; }
+        .diff-card:hover .diff-num { color: var(--color-primary-strong) !important; }
+
+        /* === TABS === */
+        .tab-btn {
+          padding: 12px 28px; border-radius: 100px; border: 1.5px solid var(--color-line-normal);
+          background: transparent; cursor: pointer; font-size: 15px;
+          font-weight: 500; transition: all 0.3s ease; color: var(--color-label-alternative);
+          font-family: inherit;
+        }
+        .tab-btn.active {
+          background: var(--color-inverse-bg); color: var(--color-inverse-label); border-color: var(--color-inverse-bg);
+        }
+        .tab-btn:hover:not(.active) { border-color: var(--color-primary-normal); color: var(--color-primary-normal); }
+
+        /* === CHIPS === */
+        .course-chip {
+          display: inline-block; padding: 8px 18px; border-radius: 8px;
+          background: var(--color-fill-normal); font-size: 14px; font-weight: 500; color: var(--color-label-normal);
+          margin: 4px; transition: all 0.2s;
+        }
+        .course-chip:hover { background: var(--color-primary-normal); color: var(--color-inverse-label); }
+
+        .case-card {
+          background: var(--color-bg-normal); border-radius: 20px; padding: 40px;
+          border: 1px solid var(--color-line-normal); transition: all 0.3s;
+        }
+        .case-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+        .process-card {
+          text-align: center; padding: 32px 24px; position: relative;
+        }
+
+        /* === FAQ === */
+        .faq-item {
+          border-bottom: 1px solid var(--color-line-normal); cursor: pointer;
+        }
+        .faq-item:hover .faq-q { color: var(--color-primary-normal); }
+
+        /* === CTA === */
+        .cta-primary {
+          display: inline-block; padding: 16px 40px; background: var(--color-primary-normal);
+          color: var(--color-inverse-label); border-radius: 12px; font-size: 16px; font-weight: 600;
+          text-decoration: none; border: none; cursor: pointer;
+          transition: all 0.3s; font-family: inherit;
+        }
+        .cta-primary:hover { background: var(--color-primary-heavy); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(3,174,160,0.3); }
+        .cta-secondary {
+          display: inline-block; padding: 16px 40px;
+          background: transparent; color: var(--color-inverse-label); border: 1.5px solid rgba(255,255,255,0.4);
+          border-radius: 12px; font-size: 16px; font-weight: 500;
+          text-decoration: none; cursor: pointer; transition: all 0.3s; font-family: inherit;
+        }
+        .cta-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--color-inverse-label); }
+
+        /* === FORM === */
+        .form-input {
+          width: 100%; padding: 14px 18px; border: 1.5px solid var(--color-line-normal);
+          border-radius: 10px; font-size: 15px; font-family: inherit;
+          transition: border-color 0.2s; background: var(--color-bg-normal); outline: none;
+          color: var(--color-label-normal);
+        }
+        .form-input:focus { border-color: var(--color-primary-normal); }
+        .form-input::placeholder { color: var(--color-label-assistive); }
+
+        /* === ZIGZAG FEATURE (Featpaper-style) === */
+        .zigzag-row {
+          display: flex; flex-direction: column; gap: 32px;
+          align-items: center; padding: 56px 0;
+          border-bottom: 1px solid var(--color-line-alternative);
+        }
+        .zigzag-row:last-child { border-bottom: none; }
+        @media (min-width: 992px) {
+          .zigzag-row { flex-direction: row; gap: 80px; padding: 72px 0; }
+          .zigzag-row.reverse { flex-direction: row-reverse; }
+        }
+        .zigzag-visual {
+          flex: 0 0 100%; border-radius: 24px; overflow: hidden;
+          background: var(--color-fill-alternative); min-height: 260px;
+          display: flex; align-items: center; justify-content: center;
+          position: relative;
+        }
+        @media (min-width: 992px) { .zigzag-visual { flex: 0 0 480px; min-height: 340px; } }
+        .zigzag-text { flex: 1; min-width: 0; }
+        .zigzag-tag {
+          display: inline-block; font-size: 12px; font-weight: 700;
+          color: var(--color-primary-heavy); background: var(--color-primary-tint);
+          padding: 5px 14px; border-radius: 100px; margin-bottom: 16px;
+        }
+        .zigzag-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.35; margin-bottom: 12px; }
+        @media (min-width: 768px) { .zigzag-title { font-size: 32px; } }
+        .zigzag-desc { font-size: 16px; line-height: 1.75; color: var(--color-label-alternative); margin-bottom: 20px; }
+        .zigzag-bullets { list-style: none; padding: 0; margin: 0; }
+        .zigzag-bullets li {
+          font-size: 15px; color: var(--color-label-neutral); padding: 6px 0;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .zigzag-bullets li::before { content: '✓'; color: var(--color-primary-normal); font-weight: 700; font-size: 14px; }
+
+        /* visual mock elements inside zigzag cards */
+        .visual-mock {
+          width: 100%; height: 100%; display: flex; flex-direction: column;
+          align-items: center; justify-content: center; padding: 40px; gap: 16px;
+        }
+
+        /* === TESTIMONIAL CAROUSEL (Featpaper-style) === */
+        .testimonial-track {
+          display: flex; gap: 24px; animation: scrollTestimonials 35s linear infinite;
+          padding: 20px 0;
+        }
+        @keyframes scrollTestimonials {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .testimonial-card {
+          flex: 0 0 380px; background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;
+          padding: 32px; transition: all 0.3s;
+        }
+        .testimonial-card:hover {
+          background: rgba(255,255,255,0.07); transform: translateY(-4px);
+          box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+
+        /* === UPDATED BIG NUMBERS (+/- prefix, Featpaper-style) === */
+        .bignumber-section { background: var(--color-inverse-bg); padding: 100px 20px; }
+        @media (min-width: 768px) { .bignumber-section { padding: 120px 24px; } }
+        .bignumber-item { text-align: center; padding: 40px 16px; }
+        .bignumber-prefix {
+          font-size: 28px; font-weight: 700; color: var(--color-primary-on-dark);
+          vertical-align: top; margin-right: 2px;
+        }
+        .bignumber-value { font-size: 56px; font-weight: 900; letter-spacing: -3px; color: var(--color-inverse-label); line-height: 1; }
+        @media (min-width: 768px) { .bignumber-value { font-size: 68px; } }
+        .bignumber-label { font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.75); margin-top: 16px; }
+        .bignumber-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 6px; }
+        .bignumber-divider {
+          width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; margin: 20px 0;
+        }
+
+        /* === PARTNER GRID === */
+        .partner-section { padding: 80px 20px; background: var(--color-bg-normal); }
+        @media (min-width: 768px) { .partner-section { padding: 100px 24px; } }
+        .partner-industry { margin-bottom: 28px; }
+        .partner-industry-label {
+          font-size: 12px; font-weight: 700; color: var(--color-primary-heavy);
+          margin-bottom: 12px; display: block;
+        }
+        .partner-logo-item {
+          display: inline-flex; align-items: center; justify-content: center;
+          padding: 10px 22px; margin: 4px; border-radius: 10px;
+          background: var(--color-fill-alternative); border: 1px solid var(--color-line-alternative);
+          font-size: 14px; font-weight: 600; color: var(--color-label-neutral);
+          transition: all 0.25s;
+        }
+        .partner-logo-item:hover {
+          background: var(--color-primary-tint); border-color: var(--color-primary-normal);
+          color: var(--color-primary-heavy); transform: translateY(-2px);
+        }
+
+        /* === BIG NUMBERS === */
+        .bignumber-section { background: var(--color-inverse-bg); padding: 80px 20px; }
+        @media (min-width: 768px) { .bignumber-section { padding: 100px 24px; } }
+        .bignumber-item { text-align: center; padding: 32px 16px; }
+        .bignumber-value { font-size: 48px; font-weight: 900; letter-spacing: -2px; color: var(--color-inverse-label); }
+        @media (min-width: 768px) { .bignumber-value { font-size: 56px; } }
+        .bignumber-label { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.7); margin-top: 8px; }
+        .bignumber-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+        /* === FEATURED COURSES === */
+        .course-card-featured {
+          background: var(--color-bg-normal); border: 1px solid var(--color-line-normal);
+          border-radius: 16px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .course-card-featured:hover {
+          transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+          border-color: var(--color-primary-normal);
+        }
+        .course-hot {
+          position: absolute; top: 16px; right: 16px; font-size: 10px; font-weight: 800;
+          color: #fff; background: var(--color-status-cautionary); padding: 4px 10px;
+          border-radius: 100px; letter-spacing: 0.5px;
+        }
+
+        /* === COMPARISON === */
+        .compare-row {
+          display: grid; grid-template-columns: 1fr; gap: 0;
+          border-bottom: 1px solid var(--color-line-alternative); padding: 0;
+        }
+        @media (min-width: 768px) {
+          .compare-row { grid-template-columns: 160px 1fr 1fr; }
+        }
+        .compare-cell { padding: 18px 20px; font-size: 14px; line-height: 1.6; }
+
+        /* === AUTHOR === */
+        .author-card {
+          background: var(--color-bg-normal); border: 1px solid var(--color-line-normal);
+          border-radius: 16px; padding: 32px; transition: all 0.3s;
+        }
+        .author-card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.06); transform: translateY(-3px); }
+
+        /* === MID CTA === */
+        .mid-cta {
+          background: linear-gradient(135deg, var(--color-primary-heavy), var(--color-primary-normal));
+          padding: 64px 20px; text-align: center; position: relative; overflow: hidden;
+        }
+        .mid-cta::before {
+          content: ''; position: absolute; inset: 0;
+          background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* === ANIMATIONS === */
+        .partner-scroll {
+          display: flex; gap: 32px; animation: scrollPartners 30s linear infinite;
+          white-space: nowrap;
+        }
+        @keyframes scrollPartners {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
+        .fade-up-d1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-up-d2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-up-d3 { animation-delay: 0.3s; opacity: 0; }
+        .fade-up-d4 { animation-delay: 0.4s; opacity: 0; }
+
+        /* === RESPONSIVE (모바일 퍼스트) ===
+           xs(<768) 기본: grid 1열 / 작은 폰트
+           sm(>=768): 2열, 폰트 키움
+           lg(>=1200): 3~4열 데스크톱 */
+        .grid-3, .grid-4 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 768px) {
+          .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        }
+        @media (min-width: 1200px) {
+          .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+          .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+
+        .hero-h1 { font-size: 32px; }
+        @media (min-width: 768px) { .hero-h1 { font-size: 40px; } }
+        @media (min-width: 1200px) { .hero-h1 { font-size: 48px; } }
+
+        .section-h2 { font-size: 28px; }
+        @media (min-width: 768px) { .section-h2 { font-size: 32px; } }
+        @media (min-width: 1200px) { .section-h2 { font-size: 36px; } }
+
+        .nav-links { display: none; }
+        @media (min-width: 992px) { .nav-links { display: flex; } }
+
+        /* === PROMO SLOTS === */
+
+        /* Slot 1: 히어로 인라인 카드 — 히어로 섹션 안에 자연스럽게 녹아드는 형태 */
+        .promo-hero-inline {
+          max-width: 1200px; margin: 0 auto; padding: 0 20px;
+          position: relative; z-index: 2;
+        }
+        .promo-hero-card {
+          display: flex; align-items: center; gap: 20px; cursor: pointer;
+          background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 16px; padding: 20px 28px;
+          backdrop-filter: blur(12px); transition: all 0.35s ease;
+        }
+        .promo-hero-card:hover {
+          background: rgba(255,255,255,0.1); border-color: var(--color-primary-on-dark);
+          transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 767px) {
+          .promo-hero-card { flex-direction: column; text-align: center; gap: 12px; }
+        }
+
+        /* Slot 2: 콘텐츠 카드 */
+        .promo-content-card {
+          background: var(--color-bg-normal); border: 1.5px solid var(--color-line-normal);
+          border-radius: 20px; padding: 36px 32px; cursor: pointer;
+          transition: all 0.35s ease; position: relative; overflow: hidden;
+        }
+        .promo-content-card:hover {
+          transform: translateY(-6px); border-color: var(--color-primary-normal);
+          box-shadow: 0 20px 60px rgba(3,174,160,0.12);
+        }
+        .promo-content-card::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0;
+          height: 4px; background: linear-gradient(90deg, var(--color-primary-normal), var(--color-primary-strong));
+          transform: scaleX(0); transition: transform 0.35s ease; transform-origin: left;
+        }
+        .promo-content-card:hover::before { transform: scaleX(1); }
+
+        /* Slot 3: 컴팩트 CTA */
+        .promo-compact-cta {
+          cursor: pointer; transition: all 0.3s ease;
+        }
+        .promo-compact-cta:hover .promo-compact-inner {
+          border-color: var(--color-primary-normal);
+          box-shadow: 0 8px 32px rgba(3,174,160,0.15);
+          transform: translateY(-2px);
+        }
+
+        .promo-btn {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 14px 32px; border-radius: 12px; font-size: 15px; font-weight: 700;
+          border: none; cursor: pointer; transition: all 0.3s ease; font-family: inherit;
+        }
+
+        .promo-tag {
+          display: inline-block; font-size: 11px; font-weight: 800;
+          padding: 4px 12px; border-radius: 100px; letter-spacing: 0.5px;
+        }
+
+        /* === LEAD CAPTURE MODAL === */
+        .lead-modal-overlay {
+          position: fixed; inset: 0; z-index: 9999;
+          background: var(--color-dimmer); display: flex; align-items: center; justify-content: center;
+          animation: fadeIn 0.25s ease; padding: 20px;
+        }
+        .lead-modal {
+          background: var(--color-bg-normal); border-radius: 24px;
+          width: 100%; max-width: 480px; position: relative;
+          animation: slideUp 0.35s ease; overflow: hidden;
+          box-shadow: 0 32px 80px rgba(0,0,0,0.2);
+        }
+        .lead-modal-header {
+          background: linear-gradient(135deg, var(--color-inverse-bg), var(--color-inverse-bg-elevated));
+          padding: 36px 36px 28px; text-align: center;
+        }
+        .lead-modal-body { padding: 32px 36px 36px; }
+        .lead-modal-close {
+          position: absolute; top: 16px; right: 16px; width: 36px; height: 36px;
+          border-radius: 50%; border: none; cursor: pointer; font-size: 18px;
+          background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6);
+          display: flex; align-items: center; justify-content: center;
+          transition: all 0.2s; font-family: inherit;
+        }
+        .lead-modal-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .lead-modal-input {
+          width: 100%; padding: 14px 18px; border: 1.5px solid var(--color-line-normal);
+          border-radius: 12px; font-size: 15px; font-family: inherit;
+          background: var(--color-bg-normal); outline: none; color: var(--color-label-normal);
+          transition: border-color 0.2s;
+        }
+        .lead-modal-input:focus { border-color: var(--color-primary-normal); }
+        .lead-modal-input::placeholder { color: var(--color-label-assistive); }
+        .lead-modal-submit {
+          width: 100%; padding: 16px; border: none; border-radius: 12px;
+          background: var(--color-primary-normal); color: #fff;
+          font-size: 16px; font-weight: 700; cursor: pointer;
+          transition: all 0.3s; font-family: inherit;
+        }
+        .lead-modal-submit:hover { background: var(--color-primary-heavy); transform: translateY(-1px); }
+        .lead-modal-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .lead-success { text-align: center; padding: 48px 36px; }
+        .lead-success-icon { font-size: 56px; margin-bottom: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .section-pad { padding: 80px 20px; }
+        @media (min-width: 768px) { .section-pad { padding: 100px 24px; } }
+        @media (min-width: 1200px) { .section-pad { padding: 120px 32px; } }
+      `}</style>
+      {/* === NAV === */}
+      <nav className={`nav-fixed ${scrolled ? 'nav-scrolled' : ''}`} style={{ padding: "16px 0" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 22, fontWeight: 800, color: scrolled ? "var(--color-label-normal)" : "var(--color-inverse-label)", letterSpacing: -0.5 }}>한빛+</span>
+            <span style={{ fontSize: 13, color: scrolled ? "var(--color-label-alternative)" : "rgba(255,255,255,0.6)", fontWeight: 500 }}>기업교육</span>
+          </div>
+          <div className="nav-links" style={{ gap: 32, alignItems: "center" }}>
+            {sections.map(s => (
+              <span key={s} onClick={() => scrollTo(s)} style={{ color: scrolled ? "var(--color-label-neutral)" : "rgba(255,255,255,0.8)", fontSize: 14, fontWeight: 500, cursor: "pointer", transition: "color 0.2s" }}
+                onMouseOver={e => e.target.style.color = scrolled ? "var(--color-primary-normal)" : "var(--color-inverse-label)"}
+                onMouseOut={e => e.target.style.color = scrolled ? "var(--color-label-neutral)" : "rgba(255,255,255,0.8)"}
+              >{s}</span>
+            ))}
+            <button className="cta-primary" onClick={() => scrollTo("문의하기")} style={{ padding: "10px 24px", fontSize: 14 }}>무료 상담 신청</button>
+          </div>
+        </div>
+      </nav>
+      {/* === HERO === */}
+      <section className="hero-section">
+        <div className="hero-inner">
+          <div className="hero-text">
+            <div className="fade-up" style={{ display: "inline-block", padding: "6px 16px", background: "var(--color-primary-soft)", borderRadius: 100, marginBottom: 24 }}>
+              <span style={{ color: "var(--color-primary-on-dark)", fontSize: 13, fontWeight: 600 }}>IT 전문 기업교육 파트너</span>
+            </div>
+            <h1 className="fade-up fade-up-d1 hero-h1" style={{ fontWeight: 800, color: "var(--color-inverse-label)", lineHeight: 1.3, letterSpacing: -1.5, marginBottom: 20 }}>
+              AI 시대,<br/>우리 조직의 IT 역량 격차를<br/>어떻게 줄일 것인가
+            </h1>
+            <p className="fade-up fade-up-d2" style={{ fontSize: 18, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 36, maxWidth: 520 }}>
+              4,000종 검증된 IT 콘텐츠 × 30년 교육 노하우.<br/>
+              도서와 영상을 결합한 업계 유일의 통합 학습으로<br/>
+              기업 맞춤 교육을 설계합니다.
+            </p>
+            <div className="fade-up fade-up-d3" style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 48 }}>
+              <button className="cta-primary" onClick={() => scrollTo("문의하기")} style={{ fontSize: 17, padding: "18px 44px" }}>무료 상담 신청하기</button>
+              <button className="cta-secondary" onClick={() => scrollTo("과정안내")}>과정 미리보기 →</button>
+            </div>
+            {/* Stats - inline below CTA */}
+            <div className="fade-up fade-up-d4" style={{ display: "flex", gap: 0, maxWidth: 480 }}>
+              {stats.map((s, i) => (
+                <div key={i} style={{ flex: 1, textAlign: "center", padding: "0 16px", borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.1)" : "none" }}>
+                  <div style={{ fontSize: 32, fontWeight: 800, color: "var(--color-inverse-label)", letterSpacing: -1 }}>
+                    <AnimatedNumber target={s.number} suffix={s.suffix} />
+                  </div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right Visual — floating cards */}
+          <div className="hero-visual" style={{ height: 420, position: "relative" }}>
+            {/* Card 1 — 도서+강의 통합 */}
+            <div className="hero-float-card card-1">
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--color-primary-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>📚</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-inverse-label)" }}>도서+영상 통합 학습</div>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>업계 유일</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                {["Python", "AI", "Cloud"].map((t, i) => (
+                  <span key={i} style={{ fontSize: 10, fontWeight: 600, color: "var(--color-primary-on-dark)", background: "var(--color-primary-tint)", padding: "3px 10px", borderRadius: 100 }}>{t}</span>
+                ))}
+              </div>
+            </div>
+            {/* Card 2 — 교육 성과 */}
+            <div className="hero-float-card card-2">
+              <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", marginBottom: 10 }}>교육 성과 리포트</div>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 6, marginBottom: 8 }}>
+                {[40, 56, 48, 72, 65, 88, 80].map((h, i) => (
+                  <div key={i} style={{ width: 20, height: h * 0.6, borderRadius: 4, background: i >= 5 ? "var(--color-primary-normal)" : "rgba(255,255,255,0.08)", transition: "all 0.3s" }} />
+                ))}
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>이수율</span>
+                <span style={{ fontSize: 18, fontWeight: 800, color: "var(--color-primary-on-dark)" }}>94%</span>
+              </div>
+            </div>
+            {/* Card 3 — 글로벌 파트너 */}
+            <div className="hero-float-card card-3">
+              <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>글로벌 파트너</div>
+              <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                <div style={{ padding: "8px 16px", background: "rgba(255,255,255,0.06)", borderRadius: 8, fontSize: 15, fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: -0.3 }}>O'Reilly</div>
+                <div style={{ padding: "8px 16px", background: "rgba(255,255,255,0.06)", borderRadius: 8, fontSize: 15, fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: -0.3 }}>Packt</div>
+                <div style={{ padding: "8px 16px", background: "rgba(255,255,255,0.06)", borderRadius: 8, fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.35)" }}>+12</div>
+              </div>
+            </div>
+            {/* Decorative glow */}
+            <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(3,174,160,0.12) 0%, transparent 70%)", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
+          </div>
+        </div>
+      </section>
+      {/* === PROMO SLOT 1: HERO BANNER === */}
+      {(() => {
+        const slot = getSlot('hero-banner');
+        if (!slot) return null;
+        return (
+          <section onClick={() => handlePromoClick(slot, slot.action)}
+            style={{ padding: '48px 20px', background: 'var(--color-bg-alternative)', cursor: 'pointer' }}
+          >
+            <div style={{
+              maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 32,
+              padding: '40px 44px', borderRadius: 20,
+              background: 'var(--color-bg-normal)', border: '1px solid var(--color-line-normal)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.04)',
+              transition: 'all 0.3s ease', flexWrap: 'wrap'
+            }}
+              onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--color-primary-normal)'; e.currentTarget.style.boxShadow = '0 8px 40px rgba(3,174,160,0.1)'; }}
+              onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--color-line-normal)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.04)'; }}
+            >
+              <div style={{ width: 64, height: 64, borderRadius: 18, background: 'var(--color-primary-tint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, flexShrink: 0 }}>
+                {slot.accentEmoji || '📥'}
+              </div>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--color-label-normal)', letterSpacing: -0.3, lineHeight: 1.4 }}>{slot.title}</div>
+                <div style={{ fontSize: 14, color: 'var(--color-label-alternative)', marginTop: 6, lineHeight: 1.5 }}>{slot.subtitle}</div>
+              </div>
+              <button className="promo-btn" style={{ background: 'var(--color-primary-normal)', color: '#fff', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                {slot.buttonText} →
+              </button>
+            </div>
+          </section>
+        );
+      })()}
+      {/* === PARTNER ROLLING TICKER === */}
+      <section style={{ padding: '48px 0', background: 'var(--color-bg-normal)', overflow: 'hidden' }}>
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-label-assistive)', letterSpacing: 2 }}>TRUSTED BY 200+ COMPANIES</span>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 80, background: 'linear-gradient(90deg, var(--color-bg-normal), transparent)', zIndex: 2 }} />
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 80, background: 'linear-gradient(270deg, var(--color-bg-normal), transparent)', zIndex: 2 }} />
+          <div style={{ display: 'flex', gap: 0, animation: 'scrollPartners 25s linear infinite', width: 'max-content' }}>
+            {[...Object.values(partnersByIndustry).flat(), ...Object.values(partnersByIndustry).flat()].map((c, i) => (
+              <span key={i} style={{
+                display: 'inline-flex', alignItems: 'center', padding: '10px 28px',
+                fontSize: 14, fontWeight: 600, color: 'var(--color-label-alternative)', whiteSpace: 'nowrap'
+              }}>
+                {c}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* === BIG NUMBERS (Featpaper-style +/- prefix) === */}
+      <section className="bignumber-section">
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 72 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-on-dark)", letterSpacing: 2 }}>BY THE NUMBERS</span>
+            <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, color: "var(--color-inverse-label)", letterSpacing: -1 }}>숫자로 보는 한빛+ 기업교육</h2>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "stretch", flexWrap: "wrap" }}>
+            {bigNumbers.map((bn, i) => (
+              <React.Fragment key={i}>
+                <div className="bignumber-item" style={{ flex: "1 1 200px", maxWidth: 280 }}>
+                  <div className="bignumber-value">
+                    {bn.prefix && <span className="bignumber-prefix">{bn.prefix}</span>}
+                    <AnimatedNumber target={bn.number} suffix={bn.suffix} />
+                  </div>
+                  <div className="bignumber-label">{bn.label}</div>
+                  <div className="bignumber-sub">{bn.sub}</div>
+                </div>
+                {i < bigNumbers.length - 1 && <div className="bignumber-divider" />}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* === PAIN POINTS === */}
+      <section id="서비스" className="section-pad" style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2, textTransform: "uppercase" }}>Problem → Solution</span>
+          <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1, lineHeight: 1.3 }}>
+            이런 고민, 한빛+가 해결합니다
+          </h2>
+        </div>
+        <div className="grid-3">
+          {painPoints.map((pp, i) => (
+            <div key={i} className="pain-card">
+              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-primary-heavy)", background: "var(--color-primary-tint)", padding: "4px 12px", borderRadius: 100 }}>{pp.tag}</span>
+              <div style={{ fontSize: 40, margin: "24px 0 16px" }}>{pp.icon}</div>
+              <p style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.6, whiteSpace: "pre-line", marginBottom: 20, minHeight: 56, color: "var(--color-label-normal)" }}>{pp.problem}</p>
+              <div style={{ borderTop: "1px solid var(--color-line-alternative)", paddingTop: 16 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-label-alternative)" }}>한빛+ 솔루션</span>
+                <p style={{ fontSize: 15, fontWeight: 600, color: "var(--color-primary-heavy)", marginTop: 6 }}>{pp.solution}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* === PROMO SLOT 2: CONTENT CARDS === */}
+      {(() => {
+        const slot = getSlot('content-cards');
+        if (!slot || !slot.cards) return null;
+        return (
+          <section style={{ padding: '64px 20px', background: 'var(--color-bg-alternative)' }}>
+            <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 36 }}>
+                <div>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-primary-normal)', letterSpacing: 2 }}>FREE RESOURCES</span>
+                  <h2 style={{ fontSize: 24, fontWeight: 800, marginTop: 8, letterSpacing: -0.5 }}>무료 자료 다운로드</h2>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+                {slot.cards.map((card, ci) => (
+                  <div key={ci} className="promo-content-card" onClick={() => handlePromoClick(slot, card.action)}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+                      <div style={{ width: 56, height: 56, borderRadius: 16, background: 'var(--color-primary-tint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>
+                        {card.emoji || '📄'}
+                      </div>
+                      {card.tag && (
+                        <span className="promo-tag" style={{
+                          color: card.tag === 'HOT' ? '#fff' : 'var(--color-primary-heavy)',
+                          background: card.tag === 'HOT' ? 'var(--color-status-cautionary)' : 'var(--color-primary-tint)'
+                        }}>{card.tag}</span>
+                      )}
+                    </div>
+                    <h3 style={{ fontSize: 19, fontWeight: 700, color: 'var(--color-label-normal)', marginBottom: 10, lineHeight: 1.4 }}>{card.title}</h3>
+                    <p style={{ fontSize: 14, color: 'var(--color-label-alternative)', lineHeight: 1.7, marginBottom: 24, minHeight: 44 }}>{card.desc}</p>
+                    <button className="promo-btn" style={{ background: 'var(--color-primary-normal)', color: '#fff', width: '100%', justifyContent: 'center' }}>
+                      {card.buttonText} →
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+      {/* === DIFFERENTIATORS — ZIGZAG (Featpaper-style) === */}
+      <section className="section-pad" style={{ background: "var(--color-bg-alternative)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2 }}>WHY HANBIT+</span>
+            <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>
+              IT 전문가들이 한빛+를 선택하는 이유
+            </h2>
+          </div>
+          {differentiators.map((d, i) => (
+            <div key={i} className={`zigzag-row ${i % 2 === 1 ? 'reverse' : ''}`}>
+              <div className="zigzag-visual" style={{ background: i === 0 ? "linear-gradient(135deg, #e8f5e3, #d1ecf1)" : i === 1 ? "linear-gradient(135deg, #e3ecf5, #f0e8f5)" : "linear-gradient(135deg, #f5f0e3, #e8f5e3)" }}>
+                <div className="visual-mock">
+                  {d.visual === "book" && <>
+                    <div style={{ display: "flex", gap: 12, alignItems: "flex-end" }}>
+                      {["📕","📗","📘","📙"].map((b, j) => (
+                        <div key={j} style={{ width: 56, height: 72 + j * 8, borderRadius: 8, background: `rgba(3,174,160,${0.15 + j*0.1})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, boxShadow: "0 4px 12px rgba(0,0,0,0.06)" }}>{b}</div>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+                      <div style={{ width: 32, height: 3, borderRadius: 2, background: "var(--color-primary-normal)" }} />
+                      <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-primary-heavy)" }}>이론 → 실습 → 적용</span>
+                      <div style={{ width: 32, height: 3, borderRadius: 2, background: "var(--color-primary-normal)" }} />
+                    </div>
+                    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                      <div style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600 }}>📖 도서</div>
+                      <div style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600 }}>🎬 영상</div>
+                      <div style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600 }}>💻 실습</div>
+                    </div>
+                  </>}
+                  {d.visual === "global" && <>
+                    <div style={{ fontSize: 64, marginBottom: 8 }}>🌍</div>
+                    <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+                      {["O'Reilly", "Packt", "Manning", "Apress"].map((p, j) => (
+                        <div key={j} style={{ padding: "10px 20px", borderRadius: 10, background: "rgba(255,255,255,0.85)", fontSize: 14, fontWeight: 700, color: j < 2 ? "var(--color-primary-heavy)" : "var(--color-label-alternative)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>{p}</div>
+                      ))}
+                    </div>
+                  </>}
+                  {d.visual === "process" && <>
+                    <div style={{ display: "flex", gap: 0, alignItems: "center" }}>
+                      {["진단", "설계", "실행", "평가"].map((s, j) => (
+                        <React.Fragment key={j}>
+                          <div style={{ width: 72, height: 72, borderRadius: "50%", background: `rgba(3,174,160,${0.15 + j*0.15})`, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-primary-heavy)" }}>STEP {j+1}</span>
+                            <span style={{ fontSize: 13, fontWeight: 800, color: "var(--color-label-normal)", marginTop: 2 }}>{s}</span>
+                          </div>
+                          {j < 3 && <div style={{ width: 24, height: 2, background: "var(--color-primary-normal)", opacity: 0.4 }} />}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 12, padding: "8px 16px", borderRadius: 8, background: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 600, color: "var(--color-primary-heavy)" }}>전담 매니저 배정 → 엔드투엔드 관리</div>
+                  </>}
+                </div>
+              </div>
+              <div className="zigzag-text">
+                <span className="zigzag-tag">{d.tag}</span>
+                <h3 className="zigzag-title" style={{ whiteSpace: "pre-line" }}>{d.title}</h3>
+                <p className="zigzag-desc">{d.desc}</p>
+                <ul className="zigzag-bullets">
+                  {d.bullets.map((b, j) => <li key={j}>{b}</li>)}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* === COMPARISON TABLE === */}
+      <section className="section-pad" style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2 }}>COMPARISON</span>
+          <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>기존 기업교육 vs 한빛+</h2>
+          <p style={{ color: "var(--color-label-alternative)", marginTop: 12, fontSize: 16 }}>같은 교육비, 다른 결과</p>
+        </div>
+        <div style={{ borderRadius: 20, overflow: "hidden", border: "1px solid var(--color-line-normal)" }}>
+          {/* Header */}
+          <div className="compare-row" style={{ background: "var(--color-inverse-bg)", borderBottom: "none" }}>
+            <div className="compare-cell" style={{ fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.4)" }}></div>
+            <div className="compare-cell" style={{ fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5 }}>기존 기업교육</div>
+            <div className="compare-cell" style={{ fontWeight: 700, fontSize: 13, color: "var(--color-primary-on-dark)", letterSpacing: 0.5 }}>한빛+ 기업교육</div>
+          </div>
+          {comparisons.map((c, i) => (
+            <div key={i} className="compare-row" style={{ background: i % 2 === 0 ? "var(--color-bg-normal)" : "var(--color-bg-alternative)" }}>
+              <div className="compare-cell" style={{ fontWeight: 700, fontSize: 13, color: "var(--color-label-neutral)", background: "var(--color-fill-alternative)" }}>{c.category}</div>
+              <div className="compare-cell" style={{ color: "var(--color-label-alternative)" }}>
+                <span style={{ marginRight: 8, opacity: 0.4 }}>△</span>{c.traditional}
+              </div>
+              <div className="compare-cell" style={{ color: "var(--color-primary-heavy)", fontWeight: 600 }}>
+                <span style={{ marginRight: 8 }}>✓</span>{c.hanbit}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* === MID-PAGE CTA === */}
+      <section className="mid-cta">
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 640, margin: "0 auto" }}>
+          <h2 style={{ fontSize: 28, fontWeight: 800, color: "#fff", letterSpacing: -0.5, marginBottom: 12, lineHeight: 1.4 }}>
+            우리 조직에 맞는 교육,<br/>지금 바로 설계해보세요
+          </h2>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.8)", marginBottom: 32 }}>
+            전담 매니저가 직무 분석부터 커리큘럼 설계까지 무료로 상담해드립니다
+          </p>
+          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+            <button className="cta-primary" onClick={() => scrollTo("문의하기")} style={{ background: "#fff", color: "var(--color-primary-heavy)" }}>무료 상담 신청 →</button>
+            <button className="cta-secondary" style={{ borderColor: "rgba(255,255,255,0.5)" }}>📞 02-336-7112</button>
+          </div>
+        </div>
+      </section>
+
+      {/* === COURSE ROADMAP (매트릭스 테이블) === */}
+      <section id="과정안내" style={{ padding: '80px 0', background: 'var(--color-bg-normal)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
+          {/* 헤더 */}
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-primary-normal)', letterSpacing: 2 }}>COURSE ROADMAP 2026</span>
+            <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>레벨별 학습 경로를 한눈에</h2>
+            <p style={{ color: 'var(--color-label-alternative)', marginTop: 10, fontSize: 15 }}>AI 에이전트 시대, 실무 중심 IT 교육 — 기업 맞춤으로 설계합니다</p>
+            {/* 통계 */}
+            <div style={{ display: 'inline-flex', gap: 0, marginTop: 20, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--color-line-normal)' }}>
+              {[{ n: '165', l: '전체 과정' }, { n: '95', l: '한빛 오리지널' }, { n: '10', l: '대분류' }].map((s, i) => (
+                <div key={i} style={{ padding: '12px 24px', background: i === 0 ? 'var(--color-inverse-bg)' : 'var(--color-bg-normal)', borderRight: i < 2 ? '1px solid var(--color-line-normal)' : 'none' }}>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: i === 0 ? 'var(--color-inverse-label)' : 'var(--color-label-normal)' }}>{s.n}</div>
+                  <div style={{ fontSize: 11, color: i === 0 ? 'rgba(255,255,255,0.5)' : 'var(--color-label-assistive)' }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 카테고리 탭 바 */}
+          <div style={{ display: 'flex', gap: 0, overflowX: 'auto', borderBottom: '2px solid var(--color-line-alternative)', marginBottom: 32, WebkitOverflowScrolling: 'touch' }}>
+            {roadmapData.map((cat, catIdx) => (
+              <button key={cat.key} onClick={() => setRoadmapCat(catIdx)}
+                style={{
+                  padding: '14px 20px', whiteSpace: 'nowrap', background: 'none', border: 'none',
+                  borderBottom: roadmapCat === catIdx ? '2px solid var(--color-label-normal)' : '2px solid transparent',
+                  marginBottom: -2, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s',
+                  fontSize: 14, fontWeight: roadmapCat === catIdx ? 700 : 500,
+                  color: roadmapCat === catIdx ? 'var(--color-label-normal)' : 'var(--color-label-assistive)',
+                }}
+              >
+                {cat.label} <span style={{ fontSize: 12, opacity: 0.5 }}>({cat.count})</span>
+              </button>
+            ))}
+          </div>
+
+          {/* 선택된 카테고리 상세 */}
+          {(() => {
+            const cat = roadmapData[roadmapCat];
+            if (!cat) return null;
+            const courses = roadmapOriginalOnly ? cat.courses.filter(c => c.s === '한빛Original') : cat.courses;
+            const originalCount = cat.courses.filter(c => c.s === '한빛Original').length;
+            const originalPct = Math.round(originalCount / cat.courses.length * 100);
+
+            return (
+              <div>
+                {/* 카테고리 설명 */}
+                <div style={{ marginBottom: 24 }}>
+                  <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-label-normal)', marginBottom: 6 }}>{cat.label}</h3>
+                  <p style={{ fontSize: 14, color: 'var(--color-label-alternative)' }}>{cat.desc}</p>
+                  <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 13, color: 'var(--color-label-neutral)', padding: '4px 12px', background: 'var(--color-fill-normal)', borderRadius: 6 }}>전체 {cat.courses.length}개</span>
+                    <span style={{ fontSize: 13, color: '#92400e', padding: '4px 12px', background: '#fef3c7', borderRadius: 6, fontWeight: 600 }}>한빛 오리지널 {originalCount}개 ({originalPct}%)</span>
+                  </div>
+                </div>
+
+                {/* 필터 + 범례 */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--color-line-normal)' }}>
+                    <span style={{ fontSize: 12, color: 'var(--color-label-assistive)' }}>필터:</span>
+                    <button onClick={() => setRoadmapOriginalOnly(false)}
+                      style={{ padding: '6px 14px', borderRadius: 6, border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', background: !roadmapOriginalOnly ? 'var(--color-inverse-bg)' : 'transparent', color: !roadmapOriginalOnly ? '#fff' : 'var(--color-label-alternative)' }}>전체 보기</button>
+                    <button onClick={() => setRoadmapOriginalOnly(true)}
+                      style={{ padding: '6px 14px', borderRadius: 6, border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', background: roadmapOriginalOnly ? 'var(--color-inverse-bg)' : 'transparent', color: roadmapOriginalOnly ? '#fff' : 'var(--color-label-alternative)' }}>한빛 오리지널만</button>
+                  </div>
+                  <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'var(--color-label-assistive)' }}>
+                    {Object.entries(brandColors).map(([brand, color]) => (
+                      <span key={brand} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ width: 10, height: 10, borderRadius: 3, background: color, display: 'inline-block' }} />{brand}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 매트릭스 테이블 */}
+                <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--color-line-normal)' }}>
+                  {/* 테이블 헤더 — 소분류 */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '100px ' + cat.subcats.map(() => '1fr').join(' '), background: 'var(--color-inverse-bg)' }}>
+                    <div style={{ padding: '16px 12px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.4)', textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
+                      난이도<br/><span style={{ fontSize: 10, fontWeight: 400 }}>분야</span>
+                    </div>
+                    {cat.subcats.map((sub, si) => {
+                      const subCourses = courses.filter(c => c.sub === sub);
+                      const subOriginal = subCourses.filter(c => c.s === '한빛Original').length;
+                      return (
+                        <div key={si} style={{ padding: '14px 12px', textAlign: 'center', borderRight: si < cat.subcats.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-inverse-label)' }}>{sub}</div>
+                          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>
+                            {subOriginal > 0 && <span style={{ color: '#e89a3c' }}>Original {subOriginal} · </span>}총 {subCourses.length}개
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* 테이블 본문 — 난이도 행 */}
+                  {LEVELS.map((level, li) => {
+                    const hasAny = cat.subcats.some(sub => courses.some(c => c.sub === sub && c.l === level));
+                    if (!hasAny) return null;
+                    const bgColors = { "고급": "#eef2ff", "중급": "#fefce8", "초중급": "#fff7ed", "입문": "#ecfdf5" };
+                    const labelColors = { "고급": "#4338ca", "중급": "#a16207", "초중급": "#c2410c", "입문": "#047857" };
+                    return (
+                      <div key={level} style={{ display: 'grid', gridTemplateColumns: '100px ' + cat.subcats.map(() => '1fr').join(' '), borderTop: '1px solid var(--color-line-alternative)', minHeight: 80 }}>
+                        {/* 난이도 라벨 셀 */}
+                        <div style={{ padding: '16px 8px', textAlign: 'center', background: bgColors[level] || '#f9fafb', borderRight: '1px solid var(--color-line-alternative)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          <div style={{ fontSize: 14, fontWeight: 800, color: labelColors[level] || '#666' }}>{level}</div>
+                          <div style={{ fontSize: 9, fontWeight: 600, color: labelColors[level] || '#666', opacity: 0.6, marginTop: 2, textTransform: 'uppercase' }}>
+                            {level === '고급' ? 'ADVANCED' : level === '중급' ? 'INTERMEDIATE' : level === '초중급' ? 'PRE-INTER' : 'BEGINNER'}
+                          </div>
+                        </div>
+                        {/* 과정 카드 셀 */}
+                        {cat.subcats.map((sub, si) => {
+                          const cellCourses = courses.filter(c => c.sub === sub && c.l === level);
+                          return (
+                            <div key={si} style={{ padding: '12px', borderRight: si < cat.subcats.length - 1 ? '1px solid var(--color-line-alternative)' : 'none', display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--color-bg-normal)' }}>
+                              {cellCourses.length > 0 ? cellCourses.map((course, ci) => (
+                                <a key={ci} href={course.u} target="_blank" rel="noopener noreferrer" style={{
+                                  display: 'block', padding: '12px', borderRadius: 8, textDecoration: 'none',
+                                  border: '1px solid var(--color-line-normal)',
+                                  borderLeft: '3px solid ' + (brandColors[course.s] || '#ccc'),
+                                  background: 'var(--color-bg-normal)', cursor: 'pointer',
+                                  transition: 'all 0.2s', fontSize: 13
+                                }}
+                                  onMouseOver={e => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                                  onMouseOut={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none'; }}
+                                >
+                                  <div style={{ fontWeight: 600, color: 'var(--color-label-normal)', lineHeight: 1.4, marginBottom: 6 }}>{course.n}</div>
+                                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: brandColors[course.s] || '#999', padding: '1px 7px', borderRadius: 4 }}>{course.s === '한빛Original' ? 'ORIGINAL' : course.s.toUpperCase()}</span>
+                                    <span style={{ fontSize: 11, color: 'var(--color-label-assistive)' }}>{course.h} · {course.l}</span>
+                                  </div>
+                                </a>
+                              )) : (
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: 13, color: 'var(--color-label-disable)' }}>—</div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* 카드 클릭 안내 */}
+                <div style={{ textAlign: 'right', marginTop: 8, fontSize: 11, color: 'var(--color-label-assistive)' }}>카드 클릭 시 상품 페이지로 이동</div>
+              </div>
+            );
+          })()}
+
+          {/* 하단 안내 + CTA */}
+          <div style={{ textAlign: 'center', marginTop: 48, padding: '32px', borderRadius: 16, background: 'var(--color-fill-alternative)', border: '1px solid var(--color-line-alternative)' }}>
+            <p style={{ fontSize: 15, color: 'var(--color-label-neutral)', marginBottom: 16 }}>
+              상기 외에도 <strong>165개+</strong> 과정을 보유하고 있으며, 기업 니즈에 맞는 <strong>맞춤형 과정 개발</strong>이 가능합니다
+            </p>
+            <button className="cta-primary" onClick={() => scrollTo("문의하기")} style={{ padding: '12px 32px', fontSize: 14 }}>전체 로드맵 상담받기 →</button>
+          </div>
+        </div>
+      </section>
+      {/* === FEATURED COURSES === */}
+      <section className="section-pad" style={{ background: "var(--color-bg-alternative)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 48, flexWrap: "wrap", gap: 16 }}>
+            <div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2 }}>POPULAR COURSES</span>
+              <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>지금 가장 많이 찾는 과정</h2>
+            </div>
+            <button className="cta-secondary" onClick={() => scrollTo("과정안내")} style={{ color: "var(--color-primary-normal)", borderColor: "var(--color-primary-normal)", padding: "10px 24px", fontSize: 14 }}>전체 과정 보기 →</button>
+          </div>
+          <div className="grid-4">
+            {featuredCourses.map((fc, i) => (
+              <div key={i} className="course-card-featured">
+                {fc.hot && <span className="course-hot">🔥 인기</span>}
+                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-primary-heavy)", background: "var(--color-primary-tint)", padding: "3px 10px", borderRadius: 100 }}>{fc.level}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-label-alternative)", background: "var(--color-fill-normal)", padding: "3px 10px", borderRadius: 100 }}>{fc.duration}</span>
+                </div>
+                <h3 style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.4, marginBottom: 10, color: "var(--color-label-normal)" }}>{fc.title}</h3>
+                <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--color-label-alternative)", marginBottom: 16, minHeight: 42 }}>{fc.desc}</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {fc.tags.map((t, j) => (
+                    <span key={j} style={{ fontSize: 11, color: "var(--color-label-alternative)", background: "var(--color-fill-normal)", padding: "3px 10px", borderRadius: 6 }}>#{t}</span>
+                  ))}
+                </div>
+                <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--color-line-alternative)", fontSize: 12, color: "var(--color-label-alternative)" }}>
+                  📍 {fc.format}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Slot 2 moved to after Pain Points */}
+
+      {/* === AUTHOR / INSTRUCTOR NETWORK === */}
+      <section className="section-pad">
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2 }}>INSTRUCTOR NETWORK</span>
+            <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>베스트셀러 저자가 직접 가르칩니다</h2>
+            <p style={{ color: "var(--color-label-alternative)", marginTop: 12, fontSize: 16, maxWidth: 560, margin: "12px auto 0" }}>
+              한빛미디어 IT 도서를 집필한 120명+ 저자 네트워크가 기업교육 강사진으로 함께합니다
+            </p>
+          </div>
+          <div className="grid-4">
+            {authorInstructors.map((ai, i) => (
+              <div key={i} className="author-card">
+                <div style={{ width: 60, height: 60, borderRadius: 16, background: "var(--color-primary-tint)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, marginBottom: 20 }}>{ai.img}</div>
+                <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{ai.name}</h3>
+                <p style={{ fontSize: 13, color: "var(--color-primary-heavy)", fontWeight: 600, marginBottom: 12 }}>{ai.title}</p>
+                <p style={{ fontSize: 13, color: "var(--color-label-alternative)", lineHeight: 1.6, marginBottom: 12 }}>{ai.books}</p>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-label-neutral)", background: "var(--color-fill-normal)", padding: "4px 12px", borderRadius: 100 }}>{ai.specialty}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", marginTop: 32, color: "var(--color-label-alternative)", fontSize: 14 }}>
+            그 외 120명+ 저자 네트워크에서 기업 니즈에 맞는 최적의 강사를 매칭해드립니다
+          </p>
+        </div>
+      </section>
+
+      {/* === CASE STUDIES — CAROUSEL (Featpaper-style) === */}
+      <section id="고객사례" className="section-pad" style={{ background: "var(--color-inverse-bg)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", marginBottom: 48 }}>
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-on-dark)", letterSpacing: 2 }}>SUCCESS STORIES</span>
+            <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, color: "var(--color-inverse-label)", letterSpacing: -1 }}>
+              한빛+와 함께 성장한 기업들
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.45)", marginTop: 12, fontSize: 16 }}>교육 담당자들의 실제 후기를 확인하세요</p>
+          </div>
+        </div>
+        {/* Scrolling testimonial carousel */}
+        <div style={{ overflow: "hidden", marginBottom: 64 }}>
+          <div className="testimonial-track">
+            {[...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies].map((cs, i) => (
+              <div key={i} className="testimonial-card">
+                <div style={{ fontSize: 32, color: "var(--color-primary-on-dark)", marginBottom: 16, lineHeight: 1, opacity: 0.3 }}>"</div>
+                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.8)", lineHeight: 1.7, marginBottom: 24, fontWeight: 500 }}>
+                  {cs.quote}
+                </p>
+                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-inverse-label)" }}>{cs.quoter}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{cs.company}</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    {cs.results.slice(0, 2).map((r, j) => (
+                      <span key={j} style={{ fontSize: 11, fontWeight: 700, color: "var(--color-primary-on-dark)", background: "var(--color-primary-tint)", padding: "4px 10px", borderRadius: 6 }}>{r}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Detailed case study cards below */}
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="grid-3">
+            {caseStudies.map((cs, i) => (
+              <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: 32 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-on-dark)", marginBottom: 12 }}>{cs.company}</div>
+                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, marginBottom: 16 }}>{cs.challenge}</p>
+                <div style={{ background: "var(--color-primary-tint)", borderRadius: 10, padding: "10px 14px", marginBottom: 16 }}>
+                  <span style={{ fontSize: 11, color: "var(--color-primary-on-dark)", fontWeight: 600 }}>적용 과정</span>
+                  <p style={{ fontSize: 13, color: "var(--color-inverse-label)", marginTop: 4, fontWeight: 500 }}>{cs.course}</p>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {cs.results.map((r, j) => (
+                    <span key={j} style={{ fontSize: 12, fontWeight: 700, color: "var(--color-inverse-label)", background: "rgba(255,255,255,0.08)", padding: "5px 12px", borderRadius: 6 }}>{r}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* === PROCESS === */}
+      <section className="section-pad" style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-primary-normal)", letterSpacing: 2 }}>PROCESS</span>
+          <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>도입 프로세스</h2>
+        </div>
+        <div className="grid-4">
+          {processSteps.map((ps, i) => (
+            <div key={i} className="process-card">
+              <div style={{ fontSize: 44, marginBottom: 16 }}>{ps.icon}</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: "var(--color-primary-normal)", marginBottom: 8 }}>STEP {ps.step}</div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 10 }}>{ps.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--color-label-alternative)", lineHeight: 1.6, whiteSpace: "pre-line" }}>{ps.desc}</p>
+              {i < 3 && <div style={{ position: "absolute", right: -8, top: "50%", transform: "translateY(-50%)", fontSize: 20, color: "var(--color-label-assistive)" }}>→</div>}
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* === INQUIRY FORM === */}
+      <section id="문의하기" className="section-pad" style={{ background: "linear-gradient(165deg, var(--color-inverse-bg), var(--color-inverse-bg-elevated))" }}>
+        <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <h2 className="section-h2" style={{ fontWeight: 800, color: "var(--color-inverse-label)", letterSpacing: -1, marginBottom: 16 }}>
+              무료 교육 상담 신청
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 16, lineHeight: 1.7 }}>
+              아래 정보를 남겨주시면 전담 매니저가 1영업일 이내 연락드립니다
+            </p>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 24, padding: 40 }}>
+            <div className="form-grid" style={{ marginBottom: 20 }}>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>회사명 *</label>
+                <input className="form-input" placeholder="회사명을 입력해주세요" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--color-inverse-label)" }} />
+              </div>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>담당자명 *</label>
+                <input className="form-input" placeholder="성함을 입력해주세요" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--color-inverse-label)" }} />
+              </div>
+            </div>
+            <div className="form-grid" style={{ marginBottom: 32 }}>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>연락처 (이메일 또는 전화) *</label>
+                <input className="form-input" placeholder="email@company.com" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--color-inverse-label)" }} />
+              </div>
+              <div>
+                <label style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", display: "block", marginBottom: 8 }}>관심 교육 분야</label>
+                <select className="form-input" value={formData.interest} onChange={e => setFormData({...formData, interest: e.target.value})} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--color-inverse-label)" }}>
+                  <option value="AI/데이터">AI / 데이터</option>
+                  <option value="개발/프로그래밍">개발 / 프로그래밍</option>
+                  <option value="IT인프라/보안">IT인프라 / 보안</option>
+                  <option value="AX전략/경영">AX전략 / 경영</option>
+                  <option value="기타">기타 (상담 시 협의)</option>
+                </select>
+              </div>
+            </div>
+            <button className="cta-primary" style={{ width: "100%", padding: "18px", fontSize: 17, borderRadius: 14 }} onClick={() => alert("상담 신청이 접수되었습니다. 1영업일 이내 연락드리겠습니다.")}>
+              무료 상담 신청하기
+            </button>
+            <div style={{ display: "flex", justifyContent: "center", gap: 32, marginTop: 28, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>📞 02-336-7112</span>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>✉ b2b@hanbit.co.kr</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* === PROMO SLOT 3: COMPACT CTA === */}
+      {(() => {
+        const slot = getSlot('cta-banner');
+        if (!slot) return null;
+        return (
+          <section className="promo-compact-cta" onClick={() => handlePromoClick(slot, slot.action)}
+            style={{ padding: '40px 20px', background: 'var(--color-bg-alternative)' }}
+          >
+            <div className="promo-compact-inner" style={{
+              maxWidth: 800, margin: '0 auto',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16,
+              padding: '28px 36px', borderRadius: 16,
+              background: 'var(--color-bg-normal)', border: '1.5px solid var(--color-line-normal)',
+              boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+              transition: 'all 0.3s ease'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1, minWidth: 200 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--color-primary-tint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>📬</div>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-label-normal)' }}>{slot.title}</div>
+                  {slot.subtitle && <div style={{ fontSize: 13, color: 'var(--color-label-alternative)', marginTop: 4 }}>{slot.subtitle}</div>}
+                </div>
+              </div>
+              <button className="promo-btn" style={{ background: 'var(--color-primary-normal)', color: '#fff', whiteSpace: 'nowrap', padding: '12px 28px', fontSize: 14 }}>
+                {slot.buttonText} →
+              </button>
+            </div>
+          </section>
+        );
+      })()}
+      {/* === FAQ === */}
+      <section style={{ padding: "100px 20px", maxWidth: 800, margin: "0 auto" }}>
+        <h2 className="section-h2" style={{ fontWeight: 800, letterSpacing: -1, marginBottom: 48, textAlign: "center" }}>자주 묻는 질문</h2>
+        {faqs.map((faq, i) => (
+          <div key={i} className="faq-item" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0" }}>
+              <span className="faq-q" style={{ fontSize: 16, fontWeight: 600, transition: "color 0.2s", color: "var(--color-label-normal)" }}>{faq.q}</span>
+              <span style={{ fontSize: 20, color: "var(--color-label-assistive)", transform: openFaq === i ? "rotate(45deg)" : "none", transition: "transform 0.3s" }}>+</span>
+            </div>
+            {openFaq === i && (
+              <div style={{ paddingBottom: 24, fontSize: 15, color: "var(--color-label-alternative)", lineHeight: 1.7 }}>{faq.a}</div>
+            )}
+          </div>
+        ))}
+      </section>
+      {/* === FINAL CTA === */}
+      <section style={{ background: "var(--color-primary-normal)", padding: "80px 20px", textAlign: "center" }}>
+        <h2 className="section-h2" style={{ fontWeight: 800, color: "var(--color-inverse-label)", letterSpacing: -0.5, marginBottom: 12 }}>
+          AI 시대의 실무 러닝 허브
+        </h2>
+        <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, marginBottom: 36 }}>
+          비즈니스 결과와 귀사의 성장을 가장 중요한 가치로 믿습니다
+        </p>
+        <button className="cta-primary" onClick={() => scrollTo("문의하기")} style={{ background: "var(--color-bg-normal)", color: "var(--color-primary-heavy)" }}>
+          기업교육 문의하기 →
+        </button>
+      </section>
+      {/* === FOOTER === */}
+      <footer style={{ background: "var(--color-inverse-bg)", padding: "48px 20px", textAlign: "center" }}>
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", lineHeight: 2 }}>
+          한빛앤(주) | 대표이사 임백준 | 서울 서대문구 연희로2길 62<br/>
+          사업자등록번호 353-87-02918 | support@hanbit.co.kr<br/>
+          © 2026 HanbitN Inc. All rights reserved.
+        </p>
+      </footer>
+      {/* === LEAD CAPTURE MODAL === */}
+      {modalConfig && (
+        <LeadCaptureModal config={modalConfig} onClose={() => setModalConfig(null)} />
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<HanbitB2BPage />);
+</script>
+</body>
+</html>

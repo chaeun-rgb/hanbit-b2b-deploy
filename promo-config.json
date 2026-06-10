@@ -1,0 +1,63 @@
+{
+  "slots": [
+    {
+      "id": "hero-banner",
+      "type": "full-banner",
+      "active": true,
+      "title": "6월 한정 — AI 프롬프트 자료집 무료 다운로드",
+      "subtitle": "실무에서 바로 쓸 수 있는 ChatGPT · Claude 프롬프트 50선",
+      "buttonText": "무료 다운로드",
+      "bgGradient": "linear-gradient(135deg, #014d40 0%, #03aea0 100%)",
+      "accentEmoji": "📥",
+      "action": {
+        "type": "popup",
+        "resourceName": "AI 프롬프트 자료집",
+        "resourceDesc": "실무에서 바로 활용할 수 있는 ChatGPT · Claude 프롬프트 50선 PDF"
+      }
+    },
+    {
+      "id": "content-cards",
+      "type": "content-card",
+      "active": true,
+      "cards": [
+        {
+          "title": "비개발자를 위한 AI 인과추론 가이드북",
+          "desc": "데이터 기반 의사결정의 핵심, 인과추론을 비전공자도 이해할 수 있게 풀어낸 입문 가이드",
+          "tag": "NEW",
+          "emoji": "🧠",
+          "buttonText": "가이드북 받기",
+          "action": {
+            "type": "popup",
+            "resourceName": "AI 인과추론 가이드북",
+            "resourceDesc": "비개발자를 위한 인과추론 입문 가이드 PDF (32페이지)"
+          }
+        },
+        {
+          "title": "2025 기업 AI 도입 현황 리포트",
+          "desc": "국내 500대 기업의 AI 교육 트렌드와 투자 현황을 한눈에 분석한 리포트",
+          "tag": "HOT",
+          "emoji": "📊",
+          "buttonText": "리포트 받기",
+          "action": {
+            "type": "popup",
+            "resourceName": "기업 AI 도입 현황 리포트",
+            "resourceDesc": "2025 국내 기업 AI 도입 현황 분석 리포트 PDF"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cta-banner",
+      "type": "compact-cta",
+      "active": true,
+      "title": "월간 AI 트렌드 리포트를 이메일로 받아보세요",
+      "subtitle": "매월 최신 AI 기술 동향과 기업 활용 사례를 정리해 보내드립니다",
+      "buttonText": "무료 구독 신청",
+      "action": {
+        "type": "popup",
+        "resourceName": "월간 AI 트렌드 리포트",
+        "resourceDesc": "매월 최신 AI 기술 트렌드와 기업 활용 사례를 이메일로 보내드립니다"
+      }
+    }
+  ]
+}
