@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>한빛+ 기업교육 · B2B 랜딩 페이지 미리보기</title>
+<title>한빛+ 기업교육 · 기업 맞춤 IT 교육 파트너</title>
+<meta name="description" content="4,000종 검증된 IT 콘텐츠와 30년 교육 노하우. 도서·영상 통합 학습, 베스트셀러 저자 직강, 직무별 맞춤 커리큘럼으로 조직의 AI·IT 역량을 강화합니다." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="한빛+ 기업교육 · 기업 맞춤 IT 교육 파트너" />
+<meta property="og:description" content="4,000종 검증된 IT 콘텐츠와 30년 교육 노하우. 도서·영상 통합 학습, 베스트셀러 저자 직강으로 조직의 AI·IT 역량을 강화합니다." />
+<meta property="og:url" content="https://hanbit-b2b-deploy.vercel.app/" />
+<meta property="og:image" content="https://cdn-prod.hanbit.co.kr/books/17ac732a-e5f0-4c64-bb09-2008b61dc3ab.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="한빛+ 기업교육 · 기업 맞춤 IT 교육 파트너" />
+<meta name="twitter:description" content="4,000종 검증된 IT 콘텐츠와 30년 교육 노하우로 조직의 AI·IT 역량을 강화합니다." />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -87,9 +96,9 @@ const { useState, useEffect, useRef } = React;
 
 const sections = ["서비스", "과정안내", "고객사례", "문의하기"];
 const stats = [
-  { number: "30", suffix: "년+", label: "IT 교육 경력" },
-  { number: "4,000", suffix: "종+", label: "검증된 콘텐츠" },
-  { number: "200", suffix: "개+", label: "도입 기업" },
+  { number: "13", suffix: "년+", label: "IT 교육 경력" },
+  { number: "516", suffix: "종+", label: "검증된 콘텐츠" },
+  { number: "36", suffix: "개+", label: "도입 기업" },
 ];
 
 /* === 확장된 파트너 데이터 === */
@@ -116,8 +125,8 @@ const partnerTickerCompanies = [
 const bigNumbers = [
   { prefix: "+", number: "94", suffix: "%", label: "평균 교육 이수율", sub: "업계 평균 대비 22%p 높음" },
   { prefix: "", number: "4.7", suffix: "/5.0", label: "수강 만족도", sub: "2024~2025 기업교육 기준" },
-  { prefix: "+", number: "120", suffix: "명", label: "저자 직강 강사진", sub: "베스트셀러 저자 네트워크" },
-  { prefix: "+", number: "85", suffix: "%", label: "재계약율", sub: "첫 교육 이후 재도입 비율" },
+  { prefix: "", number: "120", suffix: "명+", label: "저자 직강 강사진", sub: "베스트셀러 저자 네트워크" },
+  { prefix: "", number: "36", suffix: "개+", label: "도입 기업", sub: "다양한 산업군 기업교육 운영" },
 ];
 
 const featuredCourses = [
@@ -328,6 +337,11 @@ const faqs = [
   { q: "교육 기간은 보통 얼마나 걸리나요?", a: "과정에 따라 1일 특강부터 12주 심화 프로그램까지 다양합니다. 기업 일정에 맞춰 유연하게 조정 가능합니다." },
   { q: "수료증/인증서가 발급되나요?", a: "한빛미디어 명의의 수료 인증서가 발급됩니다. 과정에 따라 글로벌 파트너(O'Reilly 등) 공동 인증도 가능합니다." },
   { q: "비용은 어떻게 산정되나요?", a: "교육 인원, 기간, 과정 난이도에 따라 맞춤 견적을 제공합니다. 상담 시 예산 범위를 알려주시면 최적의 프로그램을 제안드립니다." },
+  { q: "커리큘럼을 우리 회사 상황에 맞게 커스터마이징할 수 있나요?", a: "네, 기업 업종·직무·현재 역량 수준에 맞게 커리큘럼을 100% 커스터마이징합니다. 사전 니즈 조사 → 커리큘럼 설계 → 파일럿 강의 순으로 진행합니다." },
+  { q: "LMS(학습관리시스템)를 제공하나요?", a: "자체 LMS 연동 또는 한빛미디어 제공 플랫폼을 활용할 수 있습니다. 수강 현황·진도율·퀴즈 결과를 실시간으로 확인하실 수 있습니다." },
+  { q: "법인 세금계산서 발급이 가능한가요?", a: "네, 법인 세금계산서 발급이 가능합니다. 계약 후 담당자와 세금계산서 발행 정보를 안내드립니다. 선불·후불 결제 모두 협의 가능합니다." },
+  { q: "정부 지원 사업과 연계할 수 있나요?", a: "고용노동부 직업능력개발훈련, 스마트 제조혁신 인재 양성 등 다양한 정부 지원 사업과 연계 가능합니다. 요건 확인부터 서류 작성까지 지원해드립니다." },
+  { q: "교육 후 사후 지원은 어떻게 이루어지나요?", a: "교육 수료 후 1개월간 강사 Q&A 채널을 운영하며, 추가 심화 과정·후속 워크숍도 연계 가능합니다. 장기 파트너십을 맺은 기업에는 연간 학습 로드맵 컨설팅도 제공합니다." },
 ];
 const partners = ["삼성전자", "LG전자", "카카오", "네이버", "현대자동차", "SK", "KT", "우아한형제들", "토스", "쿠팡"];
 
@@ -503,7 +517,9 @@ function HanbitB2BPage() {
       .catch(err => console.warn('[Roadmap] Data load failed:', err));
   }, []);
   const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({ company: "", name: "", contact: "", interest: "AI/데이터" });
+  const [formData, setFormData] = useState({ company: "", name: "", contact: "", interest: "AI/데이터", headcount: "", timing: "", message: "" });
+  const [formState, setFormState] = useState("idle"); // idle | submitting | success | error
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [promoSlots, setPromoSlots] = useState([]);
   const [modalConfig, setModalConfig] = useState(null);
@@ -538,6 +554,20 @@ function HanbitB2BPage() {
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const handleContactSubmit = () => {
+    if (!formData.company || !formData.name || !formData.contact) return;
+    setFormState("submitting");
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...formData, timestamp: new Date().toISOString() }),
+    })
+      .then(r => r.json())
+      .then(() => setFormState("success"))
+      .catch(() => setFormState("error"));
+  };
+
   return (
     <div style={{ fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif", color: "var(--color-label-normal)", background: "var(--color-bg-normal)", overflowX: "hidden" }}>
       <style>{`
@@ -585,6 +615,42 @@ function HanbitB2BPage() {
           border-radius: 999px; display: flex; align-items: center; justify-content: center;
         }
         @media (max-width: 899px) { .hb-util.hb-hide-sm { display: none; } }
+
+        /* === MOBILE MENU === */
+        .hb-hamburger {
+          display: flex; flex-direction: column; justify-content: center; gap: 5px;
+          width: 36px; height: 36px; border: none; background: transparent; cursor: pointer;
+          padding: 6px; border-radius: 8px; transition: background 0.2s;
+        }
+        .hb-hamburger:hover { background: #f4f5f6; }
+        .hb-hamburger span {
+          display: block; height: 2px; background: #333; border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+        @media (min-width: 900px) { .hb-hamburger { display: none; } }
+        .hb-mobile-menu {
+          display: none; position: fixed; inset: 0; z-index: 200;
+          background: rgba(3,7,18,0.5); backdrop-filter: blur(4px);
+        }
+        .hb-mobile-menu.open { display: flex; }
+        .hb-mobile-drawer {
+          width: 280px; max-width: 85vw; background: #fff;
+          height: 100%; padding: 24px 20px; overflow-y: auto;
+          display: flex; flex-direction: column; gap: 4px;
+          box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+          animation: slideInLeft 0.28s ease;
+        }
+        @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        .hb-mobile-menu-item {
+          display: block; padding: 14px 16px; font-size: 16px; font-weight: 600;
+          color: #2b2b2b; text-decoration: none; border-radius: 10px; transition: all 0.18s;
+        }
+        .hb-mobile-menu-item:hover { background: var(--color-primary-tint); color: var(--color-primary-heavy); }
+        .hb-mobile-close {
+          align-self: flex-end; margin-bottom: 8px; width: 36px; height: 36px;
+          border: none; background: #f4f5f6; border-radius: 50%; cursor: pointer;
+          font-size: 20px; display: flex; align-items: center; justify-content: center;
+        }
 
         /* === HANBIT GLOBAL FOOTER (hanbit.co.kr 그대로) === */
         .hb-footer { background: #f4f5f6; border-top: 1px solid #e5e7eb; padding: 40px 24px 56px; }
@@ -1133,9 +1199,24 @@ function HanbitB2BPage() {
               <svg className="hb-util-icon" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2.5 3.5h2.2l2.2 10.8a1.5 1.5 0 0 0 1.5 1.2h8a1.5 1.5 0 0 0 1.5-1.15L21 7.5H6" /></svg>
               <span className="hb-cart-badge">0</span>
             </a>
+            <button className="hb-hamburger" aria-label="메뉴 열기" onClick={() => setMobileMenuOpen(true)}>
+              <span /><span /><span />
+            </button>
           </div>
         </div>
       </header>
+      {/* === MOBILE MENU DRAWER === */}
+      <div className={`hb-mobile-menu${mobileMenuOpen ? ' open' : ''}`} onClick={e => { if (e.target === e.currentTarget) setMobileMenuOpen(false); }}>
+        <div className="hb-mobile-drawer">
+          <button className="hb-mobile-close" onClick={() => setMobileMenuOpen(false)}>×</button>
+          <a className="hb-mobile-menu-item" href="https://www.hanbit.co.kr/course" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)}>강의</a>
+          <a className="hb-mobile-menu-item" href="https://www.hanbit.co.kr/store/store_submain.html" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)}>책</a>
+          <a className="hb-mobile-menu-item" href="https://www.hanbit.co.kr/channel/main.html" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)}>채널.H</a>
+          <a className="hb-mobile-menu-item" href="https://www.hanbit.co.kr/support/supplement_list.html" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)}>자료실</a>
+          <div style={{ borderTop: '1px solid #eee', margin: '8px 0' }} />
+          <button className="hb-mobile-menu-item" style={{ background: 'var(--color-primary-normal)', color: '#fff', border: 'none', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', borderRadius: 10 }} onClick={() => { setMobileMenuOpen(false); scrollTo("문의하기"); }}>무료 상담 신청하기 →</button>
+        </div>
+      </div>
       {/* === HERO === */}
       <section className="hero-section">
         <div className="hero-aurora a1" />
@@ -1802,39 +1883,95 @@ function HanbitB2BPage() {
             </p>
           </div>
           <div style={{ background: "var(--color-bg-normal)", border: "1px solid var(--color-line-normal)", borderRadius: 24, padding: 40, boxShadow: "0 16px 48px rgba(3,7,18,0.08)" }}>
-            <div className="form-grid" style={{ marginBottom: 20 }}>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>회사명 *</label>
-                <input className="form-input" placeholder="회사명을 입력해주세요" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
+            {formState === "success" ? (
+              <div style={{ textAlign: "center", padding: "48px 20px" }}>
+                <div style={{ fontSize: 56, marginBottom: 20 }}>✅</div>
+                <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 12 }}>상담 신청이 완료되었습니다!</h3>
+                <p style={{ fontSize: 15, color: "var(--color-label-alternative)", lineHeight: 1.7 }}>
+                  담당 매니저가 <strong>1영업일 이내</strong> 연락드리겠습니다.<br/>
+                  긴급 문의는 아래 연락처로 직접 연락해주세요.
+                </p>
+                <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 24, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>기업교육 총괄 송경석 부장 · 010-8998-7244</span>
+                  <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>영업 담당 장경환 책임 · 010-9040-5710</span>
+                </div>
               </div>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>담당자명 *</label>
-                <input className="form-input" placeholder="성함을 입력해주세요" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-              </div>
-            </div>
-            <div className="form-grid" style={{ marginBottom: 32 }}>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>연락처 (이메일 또는 전화) *</label>
-                <input className="form-input" placeholder="email@company.com" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} />
-              </div>
-              <div>
-                <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>관심 교육 분야</label>
-                <select className="form-input" value={formData.interest} onChange={e => setFormData({...formData, interest: e.target.value})}>
-                  <option value="AI/데이터">AI / 데이터</option>
-                  <option value="개발/프로그래밍">개발 / 프로그래밍</option>
-                  <option value="IT인프라/보안">IT인프라 / 보안</option>
-                  <option value="AX전략/경영">AX전략 / 경영</option>
-                  <option value="기타">기타 (상담 시 협의)</option>
-                </select>
-              </div>
-            </div>
-            <button className="cta-primary" style={{ width: "100%", padding: "18px", fontSize: 17, borderRadius: 14 }} onClick={() => alert("상담 신청이 접수되었습니다. 1영업일 이내 연락드리겠습니다.")}>
-              무료 상담 신청하기
-            </button>
-            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 28, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>기업교육 총괄 송경석 부장 · 010-8998-7244 · ksong@hanbit.co.kr</span>
-              <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>영업 담당 장경환 책임 · 010-9040-5710 · kyeonghwan@hanbit.co.kr</span>
-            </div>
+            ) : (
+              <>
+                <div className="form-grid" style={{ marginBottom: 20 }}>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>회사명 *</label>
+                    <input className="form-input" placeholder="회사명을 입력해주세요" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>담당자명 *</label>
+                    <input className="form-input" placeholder="성함을 입력해주세요" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                  </div>
+                </div>
+                <div className="form-grid" style={{ marginBottom: 20 }}>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>연락처 (이메일 또는 전화) *</label>
+                    <input className="form-input" placeholder="email@company.com" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>관심 교육 분야</label>
+                    <select className="form-input" value={formData.interest} onChange={e => setFormData({...formData, interest: e.target.value})}>
+                      <option value="AI/데이터">AI / 데이터</option>
+                      <option value="바이브코딩/자동화">바이브 코딩 / 업무 자동화</option>
+                      <option value="개발/프로그래밍">개발 / 프로그래밍</option>
+                      <option value="IT인프라/보안">IT인프라 / 보안</option>
+                      <option value="AX전략/경영">AX전략 / 경영</option>
+                      <option value="기타">기타 (상담 시 협의)</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-grid" style={{ marginBottom: 20 }}>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>수강 예정 인원</label>
+                    <select className="form-input" value={formData.headcount} onChange={e => setFormData({...formData, headcount: e.target.value})}>
+                      <option value="">선택해주세요</option>
+                      <option value="10명 미만">10명 미만</option>
+                      <option value="10~30명">10~30명</option>
+                      <option value="30~100명">30~100명</option>
+                      <option value="100~300명">100~300명</option>
+                      <option value="300명 이상">300명 이상</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>교육 희망 시기</label>
+                    <select className="form-input" value={formData.timing} onChange={e => setFormData({...formData, timing: e.target.value})}>
+                      <option value="">선택해주세요</option>
+                      <option value="1개월 이내">1개월 이내</option>
+                      <option value="1~3개월 내">1~3개월 내</option>
+                      <option value="3~6개월 내">3~6개월 내</option>
+                      <option value="6개월 이후">6개월 이후</option>
+                      <option value="미정">미정 (상담 후 결정)</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ marginBottom: 28 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>추가 문의사항</label>
+                  <textarea className="form-input" placeholder="교육 목적, 현재 조직 상황, 특별 요청사항 등을 자유롭게 적어주세요." rows={3} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} style={{ resize: "vertical", lineHeight: 1.6 }} />
+                </div>
+                <button
+                  className="cta-primary"
+                  style={{ width: "100%", padding: "18px", fontSize: 17, borderRadius: 14, opacity: formState === "submitting" ? 0.7 : 1 }}
+                  disabled={formState === "submitting" || !formData.company || !formData.name || !formData.contact}
+                  onClick={handleContactSubmit}
+                >
+                  {formState === "submitting" ? "처리 중..." : "무료 상담 신청하기"}
+                </button>
+                {formState === "error" && (
+                  <p style={{ textAlign: "center", marginTop: 12, fontSize: 13, color: "var(--color-status-negative)" }}>
+                    오류가 발생했습니다. 아래 연락처로 직접 문의해주세요.
+                  </p>
+                )}
+                <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 28, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>기업교육 총괄 송경석 부장 · 010-8998-7244 · ksong@hanbit.co.kr</span>
+                  <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>영업 담당 장경환 책임 · 010-9040-5710 · kyeonghwan@hanbit.co.kr</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
