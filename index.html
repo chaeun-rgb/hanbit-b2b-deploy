@@ -429,21 +429,19 @@ function LeadCaptureModal({ config, onClose }) {
     setSubmitting(true);
     PromoAnalytics.trackSubmit(config.slotId, config.resourceName);
     // API로 리드 데이터 전송
-    fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        company: lead.company,
-        name: lead.name,
-        email: lead.email,
-        resource: config.resourceName,
-        slotId: config.slotId,
-        timestamp: new Date().toISOString(),
-      }),
-    })
-      .then(r => r.json())
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbypMwov2ygX9TLyKWh6-rpGBb9HWtEvWs7yUD2giWaXoPnvm-_ALTwgcY7uRHAusaqEBw/exec';
+    const params = new URLSearchParams({
+      type: '자료다운로드',
+      timestamp: new Date().toISOString(),
+      company: lead.company,
+      name: lead.name,
+      contact: lead.email,
+      interest: config.resourceName || '-',
+      headcount: '-', timing: '-', message: '-',
+    });
+    fetch(`${GAS_URL}?${params.toString()}`, { mode: 'no-cors' })
       .then(() => { setSubmitting(false); setSubmitted(true); })
-      .catch(() => { setSubmitting(false); setSubmitted(true); }); // 에러 시에도 사용자에겐 완료 표시
+      .catch(() => { setSubmitting(false); setSubmitted(true); });
   };
 
   if (!config) return null;
