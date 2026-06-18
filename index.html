@@ -563,12 +563,18 @@ function HanbitB2BPage() {
   const handleContactSubmit = () => {
     if (!formData.company || !formData.name || !formData.contact) return;
     setFormState("submitting");
-    fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ ...formData, type: '상담신청', timestamp: new Date().toISOString() }),
-    })
+    const params = new URLSearchParams({
+      type: '상담신청',
+      timestamp: new Date().toISOString(),
+      company: formData.company,
+      name: formData.name,
+      contact: formData.contact,
+      interest: formData.interest || '-',
+      headcount: formData.headcount || '-',
+      timing: formData.timing || '-',
+      message: formData.message || '-',
+    });
+    fetch(`${GAS_URL}?${params.toString()}`, { mode: 'no-cors' })
       .then(() => setFormState("success"))
       .catch(() => setFormState("error"));
   };
