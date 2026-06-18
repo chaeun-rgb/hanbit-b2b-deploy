@@ -559,22 +559,26 @@ function HanbitB2BPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxf2r3fDEgv1eXUGCUid0GBulPuVeF0q8X9NOSnF-r3WZVsCC3m6h-FZdmMaKv3EUb4sQ/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbypMwov2ygX9TLyKWh6-rpGBb9HWtEvWs7yUD2giWaXoPnvm-_ALTwgcY7uRHAusaqEBw/exec';
   const handleContactSubmit = () => {
     if (!formData.company || !formData.name || !formData.contact) return;
     setFormState("submitting");
-    const params = new URLSearchParams({
-      type: '상담신청',
-      timestamp: new Date().toISOString(),
-      company: formData.company,
-      name: formData.name,
-      contact: formData.contact,
-      interest: formData.interest || '-',
-      headcount: formData.headcount || '-',
-      timing: formData.timing || '-',
-      message: formData.message || '-',
-    });
-    fetch(`${GAS_URL}?${params.toString()}`, { mode: 'no-cors' })
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        type: '상담신청',
+        timestamp: new Date().toISOString(),
+        company: formData.company,
+        name: formData.name,
+        contact: formData.contact,
+        interest: formData.interest || '-',
+        headcount: formData.headcount || '-',
+        timing: formData.timing || '-',
+        message: formData.message || '-',
+      }),
+    })
       .then(() => setFormState("success"))
       .catch(() => setFormState("error"));
   };
