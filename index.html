@@ -559,15 +559,16 @@ function HanbitB2BPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxf2r3fDEgv1eXUGCUid0GBulPuVeF0q8X9NOSnF-r3WZVsCC3m6h-FZdmMaKv3EUb4sQ/exec';
   const handleContactSubmit = () => {
     if (!formData.company || !formData.name || !formData.contact) return;
     setFormState("submitting");
-    fetch('/api/contact', {
+    fetch(GAS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...formData, timestamp: new Date().toISOString() }),
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ ...formData, type: '상담신청', timestamp: new Date().toISOString() }),
     })
-      .then(r => r.json())
       .then(() => setFormState("success"))
       .catch(() => setFormState("error"));
   };
