@@ -1899,6 +1899,9 @@ function HanbitB2BPage() {
                   <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>기업교육 총괄 송경석 부장 · 010-8998-7244</span>
                   <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>영업 담당 장경환 책임 · 010-9040-5710</span>
                 </div>
+                <button onClick={() => { setFormState("idle"); setFormData({ company: "", name: "", contact: "", interest: "AI/데이터", headcount: "", timing: "", message: "" }); }} style={{ marginTop: 28, background: "none", border: "1px solid var(--color-line-normal)", borderRadius: 10, padding: "10px 24px", fontSize: 14, color: "var(--color-label-alternative)", cursor: "pointer" }}>
+                  다시 신청하기
+                </button>
               </div>
             ) : (
               <>
