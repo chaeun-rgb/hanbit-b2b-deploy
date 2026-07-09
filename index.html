@@ -1594,19 +1594,58 @@ function HanbitB2BPage() {
       <section id="과정안내" style={{ padding: '80px 0', background: 'var(--color-bg-normal)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
           {/* 헤더 */}
-          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-primary-normal)', letterSpacing: 2 }}>COURSE ROADMAP 2026</span>
             <h2 className="section-h2" style={{ fontWeight: 800, marginTop: 12, letterSpacing: -1 }}>레벨별 학습 경로를 한눈에</h2>
             <p style={{ color: 'var(--color-label-alternative)', marginTop: 10, fontSize: 15 }}>AI 에이전트 시대, 실무 중심 IT 교육 — 기업 맞춤으로 설계합니다</p>
-            {/* 통계 */}
-            <div style={{ display: 'inline-flex', gap: 0, marginTop: 20, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--color-line-normal)' }}>
-              {[{ n: '165', l: '전체 과정' }, { n: '95', l: '한빛 오리지널' }, { n: '10', l: '대분류' }].map((s, i) => (
-                <div key={i} style={{ padding: '12px 24px', background: i === 0 ? 'var(--color-primary-normal)' : 'var(--color-bg-normal)', borderRight: i < 2 ? '1px solid var(--color-line-normal)' : 'none' }}>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: i === 0 ? 'var(--color-inverse-label)' : 'var(--color-label-normal)' }}>{s.n}</div>
-                  <div style={{ fontSize: 11, color: i === 0 ? 'rgba(255,255,255,0.5)' : 'var(--color-label-assistive)' }}>{s.l}</div>
+          </div>
+
+          {/* 3단계 로드맵 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, marginBottom: 56, borderRadius: 16, overflow: 'hidden', border: '1px solid var(--color-line-normal)', position: 'relative' }}>
+            {[
+              {
+                level: '이해', sub: 'AI 활용', badge: 'STEP 01', emoji: '🌱',
+                color: '#0d9488', courses: 9,
+                cats: ['AI 입문 · 챗GPT 활용', '데이터 · 콘텐츠 직무 활용', '랭체인 · RAG 입문'],
+                desc: '비개발자·실무자 관점에서 AI 도구를 익히고 업무에 바로 적용합니다',
+              },
+              {
+                level: '적용', sub: 'AI 구축', badge: 'STEP 02', emoji: '⚙️',
+                color: '#0891b2', courses: 15,
+                cats: ['AI 에이전트 · 자동화', '바이브 코딩', '모델 · 개발'],
+                desc: '노코드 자동화부터 LLM·RAG까지, AI 시스템을 직접 구축합니다',
+              },
+              {
+                level: '창조', sub: '실전 CDL', badge: 'STEP 03', emoji: '🚀',
+                color: '#7c3aed', courses: 1,
+                cats: ['AI 챌린지 드리븐 러닝'],
+                desc: '실제 도전 과제를 해결하며 AI를 실전 프로젝트로 완성합니다',
+              },
+            ].map((stage, i) => (
+              <div key={i} style={{ padding: '32px 28px', background: 'var(--color-bg-normal)', borderRight: i < 2 ? '1px solid var(--color-line-normal)' : 'none', position: 'relative' }}>
+                {i < 2 && (
+                  <div style={{ position: 'absolute', right: -16, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, background: 'var(--color-bg-normal)', border: '1px solid var(--color-line-normal)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, zIndex: 1 }}>→</div>
+                )}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, background: stage.color + '18', marginBottom: 16 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: stage.color, letterSpacing: 1 }}>{stage.badge}</span>
                 </div>
-              ))}
-            </div>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>{stage.emoji}</div>
+                <div style={{ fontSize: 24, fontWeight: 900, color: stage.color, letterSpacing: -1 }}>{stage.level}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-label-alternative)', marginBottom: 12 }}>{stage.sub}</div>
+                <p style={{ fontSize: 13, color: 'var(--color-label-alternative)', lineHeight: 1.6, marginBottom: 20 }}>{stage.desc}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {stage.cats.map((cat, j) => (
+                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--color-label-neutral)' }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: stage.color, flexShrink: 0 }} />
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--color-line-alternative)', fontSize: 13, fontWeight: 700, color: stage.color }}>
+                  {stage.courses}개 과정
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* 카테고리 탭 바 */}
