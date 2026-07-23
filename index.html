@@ -528,7 +528,7 @@ function HanbitB2BPage() {
       .catch(err => console.warn('[Roadmap] Data load failed:', err));
   }, []);
   const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({ company: "", name: "", contact: "", interest: "AI/데이터", headcount: "", timing: "", message: "" });
+  const [formData, setFormData] = useState({ company: "", name: "", email: "", phone: "", interest: "AI/데이터", headcount: "", timing: "", message: "" });
   const [formState, setFormState] = useState("idle"); // idle | submitting | success | error
   const [scrolled, setScrolled] = useState(false);
   const [promoSlots, setPromoSlots] = useState([]);
@@ -567,14 +567,15 @@ function HanbitB2BPage() {
 
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbyIRtq5ziw-u3Lgy_lTi0i3l12pgjSYn5le2-TueYxwPgXs8u6QpUQbpifnFVh43hbF/exec';
   const handleContactSubmit = () => {
-    if (!formData.company || !formData.name || !formData.contact) return;
+    if (!formData.company || !formData.name || (!formData.email && !formData.phone)) return;
     setFormState("submitting");
+    const contactStr = [formData.email, formData.phone].filter(Boolean).join(' / ');
     const params = new URLSearchParams({
       type: '상담신청',
       timestamp: new Date().toISOString(),
       company: formData.company,
       name: formData.name,
-      contact: formData.contact,
+      contact: contactStr,
       interest: formData.interest || '-',
       headcount: formData.headcount || '-',
       timing: formData.timing || '-',
@@ -1840,7 +1841,7 @@ function HanbitB2BPage() {
                   <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>기업교육 총괄 송경석 부장 · 02-2128-8745</span>
                   <span style={{ fontSize: 13, color: "var(--color-label-alternative)" }}>영업 담당 장경환 책임 · 02-2128-8747</span>
                 </div>
-                <button onClick={() => { setFormState("idle"); setFormData({ company: "", name: "", contact: "", interest: "AI/데이터", headcount: "", timing: "", message: "" }); }} style={{ marginTop: 28, background: "var(--color-primary-normal)", border: "none", borderRadius: 10, padding: "12px 32px", fontSize: 15, fontWeight: 700, color: "#fff", cursor: "pointer" }}>
+                <button onClick={() => { setFormState("idle"); setFormData({ company: "", name: "", email: "", phone: "", interest: "AI/데이터", headcount: "", timing: "", message: "" }); }} style={{ marginTop: 28, background: "var(--color-primary-normal)", border: "none", borderRadius: 10, padding: "12px 32px", fontSize: 15, fontWeight: 700, color: "#fff", cursor: "pointer" }}>
                   확인
                 </button>
               </div>
@@ -1858,9 +1859,15 @@ function HanbitB2BPage() {
                 </div>
                 <div className="form-grid" style={{ marginBottom: 20 }}>
                   <div>
-                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>연락처 (이메일 또는 전화) *</label>
-                    <input className="form-input" placeholder="email@company.com" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} />
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>이메일 <span style={{ fontWeight: 400, color: "var(--color-label-assistive)" }}>(이메일 또는 전화 중 하나 필수)</span></label>
+                    <input className="form-input" type="email" placeholder="email@company.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
                   </div>
+                  <div>
+                    <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>전화번호</label>
+                    <input className="form-input" type="tel" placeholder="010-0000-0000" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                  </div>
+                </div>
+                <div className="form-grid" style={{ marginBottom: 20 }}>
                   <div>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>관심 교육 분야</label>
                     <select className="form-input" value={formData.interest} onChange={e => setFormData({...formData, interest: e.target.value})}>
@@ -1904,7 +1911,7 @@ function HanbitB2BPage() {
                 <button
                   className="cta-primary"
                   style={{ width: "100%", padding: "18px", fontSize: 17, borderRadius: 14, opacity: formState === "submitting" ? 0.7 : 1 }}
-                  disabled={formState === "submitting" || !formData.company || !formData.name || !formData.contact}
+                  disabled={formState === "submitting" || !formData.company || !formData.name || (!formData.email && !formData.phone)}
                   onClick={handleContactSubmit}
                 >
                   {formState === "submitting" ? "처리 중..." : "무료 상담 신청하기"}
