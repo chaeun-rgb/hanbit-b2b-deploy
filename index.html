@@ -438,7 +438,7 @@ function LeadCaptureModal({ config, onClose }) {
     setSubmitting(true);
     PromoAnalytics.trackSubmit(config.slotId, config.resourceName);
     // API로 리드 데이터 전송
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwHisiip5ShwHYCKCXyB0NEol7iIa7lq0RlZlBtSdPqxVI_ymVYyWD7D_16p7wShiulqg/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyIRtq5ziw-u3Lgy_lTi0i3l12pgjSYn5le2-TueYxwPgXs8u6QpUQbpifnFVh43hbF/exec';
     const params = new URLSearchParams({
       type: '자료다운로드',
       timestamp: new Date().toISOString(),
@@ -565,7 +565,7 @@ function HanbitB2BPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwHisiip5ShwHYCKCXyB0NEol7iIa7lq0RlZlBtSdPqxVI_ymVYyWD7D_16p7wShiulqg/exec';
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyIRtq5ziw-u3Lgy_lTi0i3l12pgjSYn5le2-TueYxwPgXs8u6QpUQbpifnFVh43hbF/exec';
   const handleContactSubmit = () => {
     if (!formData.company || !formData.name || !formData.contact) return;
     setFormState("submitting");
