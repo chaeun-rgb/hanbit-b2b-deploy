@@ -555,8 +555,14 @@ function HanbitB2BPage() {
   };
 
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbyIRtq5ziw-u3Lgy_lTi0i3l12pgjSYn5le2-TueYxwPgXs8u6QpUQbpifnFVh43hbF/exec';
+  const [contactError, setContactError] = useState("");
   const handleContactSubmit = () => {
-    if (!formData.company || !formData.name || (!formData.email && !formData.phone)) return;
+    if (!formData.email && !formData.phone) {
+      setContactError("이메일과 전화번호 둘 중 하나를 입력해주세요.");
+      return;
+    }
+    setContactError("");
+    if (!formData.company || !formData.name) return;
     setFormState("submitting");
     const contactStr = [formData.email, formData.phone].filter(Boolean).join(' / ');
     const params = new URLSearchParams({
@@ -1833,13 +1839,14 @@ function HanbitB2BPage() {
                 <div className="form-grid" style={{ marginBottom: 20 }}>
                   <div>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>이메일 <span style={{ fontWeight: 400, color: "var(--color-label-assistive)" }}>(이메일 또는 전화 중 하나 필수)</span></label>
-                    <input className="form-input" type="email" placeholder="email@company.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                    <input className="form-input" type="email" placeholder="email@company.com" value={formData.email} onChange={e => { setFormData({...formData, email: e.target.value}); setContactError(""); }} />
                   </div>
                   <div>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>전화번호</label>
-                    <input className="form-input" type="tel" placeholder="010-0000-0000" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                    <input className="form-input" type="tel" placeholder="010-0000-0000" value={formData.phone} onChange={e => { setFormData({...formData, phone: e.target.value}); setContactError(""); }} />
                   </div>
                 </div>
+                {contactError && <p style={{ fontSize: 13, color: "#dc2626", marginBottom: 16, marginTop: -8 }}>{contactError}</p>}
                 <div className="form-grid" style={{ marginBottom: 20 }}>
                   <div>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label-neutral)", display: "block", marginBottom: 8 }}>관심 교육 분야</label>
